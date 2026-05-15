@@ -66,7 +66,7 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 /* ── HERO ──────────────────────── */
 .hero {
   min-height: 100vh;
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid; grid-template-columns: 1fr 480px;
   align-items: center;
   padding: 100px 80px 60px;
   background: var(--plum);
@@ -94,7 +94,6 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
   color: var(--blush); font-size:0.8rem; font-weight:500;
   letter-spacing:1.5px; text-transform:uppercase;
   padding:8px 18px; border-radius:50px; margin-bottom:28px;
-  opacity:0;
 }
 .hero-title {
   font-family: var(--ff-h);
@@ -105,12 +104,12 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 }
 .hero-title .italic { font-style:italic; color: var(--blush); }
 .hero-title .line { display:block; overflow:hidden; }
-.hero-title .line-inner { display:block; transform:translateY(100%); }
+.hero-title .line-inner { display:block; }
 .hero-sub {
   font-size:1.05rem; color:rgba(255,255,255,0.55);
-  max-width:420px; line-height:1.7; margin-bottom:40px; opacity:0;
+  max-width:420px; line-height:1.7; margin-bottom:40px;
 }
-.hero-btns { display:flex; gap:14px; flex-wrap:wrap; opacity:0; }
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
 .btn-hero-primary {
   background: var(--pink); color:#fff;
   padding:16px 36px; border-radius:50px;
@@ -487,6 +486,76 @@ footer {
   font-size:0.82rem;
 }
 
+/* ── PRODUCT TYPE SELECTOR ─────── */
+.product-type-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
+.pt-card {
+  border:2px solid var(--border); border-radius:14px;
+  padding:14px 10px; cursor:pointer; text-align:center;
+  background:var(--white); transition:all 0.2s;
+  position:relative;
+}
+.pt-card:hover { border-color:var(--pink); transform:translateY(-2px); box-shadow:0 8px 20px rgba(232,130,154,0.12); }
+.pt-card.active { border-color:var(--pink); background:rgba(232,130,154,0.07); }
+.pt-card .pt-icon { font-size:1.8rem; margin-bottom:6px; }
+.pt-card .pt-name { font-size:0.78rem; font-weight:700; color:var(--plum); }
+.pt-card .pt-price { font-size:0.72rem; color:var(--pink); margin-top:2px; font-weight:600; }
+
+/* ── DRAW TOOL ─────────────────── */
+.draw-overlay {
+  position:fixed; inset:0; z-index:600;
+  background:rgba(30,15,30,0.8); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px; opacity:0; pointer-events:none;
+  transition:opacity 0.3s;
+}
+.draw-overlay.open { opacity:1; pointer-events:all; }
+.draw-modal {
+  background:var(--white); border-radius:24px;
+  padding:32px; max-width:680px; width:100%;
+  transform:translateY(20px); transition:transform 0.3s;
+}
+.draw-overlay.open .draw-modal { transform:none; }
+.draw-modal h3 { font-family:var(--ff-h); font-size:1.5rem; margin-bottom:6px; }
+.draw-modal p { font-size:0.85rem; color:var(--muted,#888); margin-bottom:20px; }
+.draw-toolbar {
+  display:flex; align-items:center; gap:10px;
+  flex-wrap:wrap; margin-bottom:14px;
+  padding:12px 16px; background:var(--soft);
+  border-radius:12px;
+}
+.draw-colors { display:flex; gap:7px; }
+.draw-color-dot {
+  width:26px; height:26px; border-radius:50%;
+  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
+  border:2px solid transparent;
+}
+.draw-color-dot:hover { transform:scale(1.2); }
+.draw-color-dot.active { box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--plum); }
+.draw-sep { width:1px; height:28px; background:var(--border); }
+.draw-tool-btn {
+  padding:6px 14px; border-radius:8px; border:2px solid var(--border);
+  background:var(--white); font-size:0.8rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s; color:var(--plum);
+}
+.draw-tool-btn:hover,.draw-tool-btn.active { border-color:var(--pink); background:rgba(232,130,154,0.1); color:var(--pink); }
+.draw-size-row { display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--plum); }
+.draw-size-row input[type=range] { width:80px; accent-color:var(--pink); }
+.draw-canvas-wrap {
+  border:2px solid var(--border); border-radius:12px;
+  overflow:hidden; cursor:crosshair; position:relative;
+  background: repeating-conic-gradient(#f0f0f0 0% 25%, white 0% 50%) 0 0 / 20px 20px;
+}
+#drawCanvas { display:block; width:100%; touch-action:none; }
+.draw-actions { display:flex; gap:10px; margin-top:16px; }
+.draw-upload-label {
+  padding:10px 18px; border-radius:10px;
+  border:2px dashed var(--border); background:var(--soft);
+  font-size:0.85rem; font-weight:600; cursor:pointer;
+  color:var(--plum); transition:all 0.2s;
+  display:flex; align-items:center; gap:8px;
+}
+.draw-upload-label:hover { border-color:var(--pink); color:var(--pink); }
+
 /* ── RESPONSIVE ────────────────── */
 @media (max-width:900px) {
   .hero { grid-template-columns:1fr; padding:100px 28px 60px; text-align:center; }
@@ -595,6 +664,12 @@ footer {
     <!-- Options -->
     <div class="options-panel">
 
+      <div class="opt-group" id="productTypeGroup">
+        <span class="opt-label">Choose Your Product</span>
+        <div class="product-type-grid" id="productTypeGrid"></div>
+      </div>
+      <div class="opt-divider"></div>
+
       <div class="opt-group">
         <span class="opt-label">Base Color</span>
         <div class="color-grid" id="colorGrid"></div>
@@ -605,8 +680,15 @@ footer {
         <span class="opt-label">Wrap Design</span>
         <div class="pgrid" id="patternGrid"></div>
         <div id="adminDesignsRow" style="margin-top:12px;display:none;">
-          <span class="opt-label" style="margin-bottom:10px;display:block;">Your Uploaded Designs</span>
+          <span class="opt-label" style="margin-bottom:10px;display:block;">Saved Designs</span>
           <div class="upload-designs" id="adminDesignsGrid"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <button class="draw-tool-btn" style="flex:1;padding:10px;" onclick="openDrawTool()">✏️ Draw Your Own</button>
+          <label class="draw-upload-label" style="flex:1;justify-content:center;">
+            📁 Upload Image
+            <input type="file" accept="image/*" style="display:none;" onchange="handleWrapUpload(this)">
+          </label>
         </div>
       </div>
       <div class="opt-divider"></div>
@@ -681,6 +763,39 @@ footer {
     </div>
   </div>
 </section>
+
+<!-- DRAW TOOL MODAL -->
+<div class="draw-overlay" id="drawOverlay" onclick="drawOverlayBg(event)">
+  <div class="draw-modal">
+    <h3>✏️ Draw Your Design</h3>
+    <p>Sketch freely — your drawing will wrap around the tumbler. Or upload an image below.</p>
+    <div class="draw-toolbar">
+      <div class="draw-colors" id="drawColors"></div>
+      <div class="draw-sep"></div>
+      <button class="draw-tool-btn active" id="drawPenBtn" onclick="setDrawMode('pen',this)">🖊 Pen</button>
+      <button class="draw-tool-btn" id="drawEraserBtn" onclick="setDrawMode('eraser',this)">⬜ Eraser</button>
+      <button class="draw-tool-btn" onclick="clearDrawCanvas()">🗑 Clear</button>
+      <div class="draw-sep"></div>
+      <div class="draw-size-row">
+        Size <input type="range" id="drawSize" min="2" max="40" value="10" oninput="updateDrawSize(this.value)">
+        <span id="drawSizeVal">10</span>
+      </div>
+    </div>
+    <div class="draw-canvas-wrap">
+      <canvas id="drawCanvas" width="620" height="200"></canvas>
+    </div>
+    <div class="draw-actions">
+      <label class="draw-upload-label">
+        📁 Upload an Image Instead
+        <input type="file" accept="image/*" style="display:none;" onchange="handleDrawUpload(this)">
+      </label>
+      <div style="margin-left:auto;display:flex;gap:10px;">
+        <button class="btn-cancel" onclick="closeDrawTool()">Cancel</button>
+        <button class="btn-submit" style="padding:10px 28px;" onclick="applyDrawing()">Apply to Tumbler →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ORDER MODAL -->
 <div class="overlay" id="overlay" onclick="overlayBg(event)">
@@ -816,13 +931,11 @@ function makeScene(canvasEl) {
   const bot = new THREE.DirectionalLight(0xffffff, 0.2);
   bot.position.set(0, -5, 2); scene.add(bot);
 
-  // 20oz Skinny Tumbler geometry
+  // 20oz Skinny Tumbler geometry — clean, no top ring
   const segments = 128;
   const bodyGeo  = new THREE.CylinderGeometry(1.32, 1.08, 5.6, segments, 1, false);
-  // Top ring (lip)
-  const lipGeo   = new THREE.TorusGeometry(1.33, 0.05, 16, segments);
-  // Bottom ring
-  const baseRingGeo = new THREE.TorusGeometry(1.09, 0.06, 16, segments);
+  // Bottom base ring only (realistic base)
+  const baseRingGeo = new THREE.TorusGeometry(1.09, 0.055, 16, segments);
   // Bottom disc
   const baseDiscGeo = new THREE.CircleGeometry(1.08, segments);
 
@@ -847,8 +960,6 @@ function makeScene(canvasEl) {
   });
 
   const body = new THREE.Mesh(bodyGeo, [bodyMat, capMat, capMat]);
-  const lip  = new THREE.Mesh(lipGeo, lipMat);
-  lip.position.y = 2.8;
   const baseRing = new THREE.Mesh(baseRingGeo, lipMat);
   baseRing.position.y = -2.8;
   const baseDisc = new THREE.Mesh(baseDiscGeo, capMat);
@@ -856,7 +967,7 @@ function makeScene(canvasEl) {
   baseDisc.position.y = -2.83;
 
   const group = new THREE.Group();
-  group.add(body, lip, baseRing, baseDisc);
+  group.add(body, baseRing, baseDisc);
   scene.add(group);
 
   return { renderer, scene, camera, group, tex, texCanvas, bodyMat, capMat, lipMat };
@@ -869,6 +980,9 @@ const heroControls = new OrbitControls(heroScn.camera, heroEl);
 heroControls.enableZoom = false; heroControls.enablePan = false;
 heroControls.autoRotate = true; heroControls.autoRotateSpeed = 1.8;
 heroControls.enableDamping = true; heroControls.dampingFactor = 0.05;
+heroControls.minPolarAngle = Math.PI * 0.38;
+heroControls.maxPolarAngle = Math.PI * 0.62;
+heroControls.target.set(0, 0, 0);
 
 // ── MAIN CUSTOMIZER SCENE ──────────────────────────────────────────────
 const mainEl = document.getElementById('tumblerCanvas');
@@ -877,7 +991,8 @@ const mainControls = new OrbitControls(mainScn.camera, mainEl);
 mainControls.enableZoom = false; mainControls.enablePan = false;
 mainControls.autoRotate = true; mainControls.autoRotateSpeed = 1.5;
 mainControls.enableDamping = true; mainControls.dampingFactor = 0.06;
-mainControls.minPolarAngle = Math.PI/4; mainControls.maxPolarAngle = 3*Math.PI/4;
+mainControls.minPolarAngle = Math.PI * 0.35; mainControls.maxPolarAngle = Math.PI * 0.65;
+mainControls.target.set(0, 0, 0);
 
 let autoRotating = true;
 mainControls.addEventListener('start', () => { mainControls.autoRotate = false; });
@@ -1217,6 +1332,158 @@ window.submitOrder=async(e)=>{
   document.getElementById('successView').style.display='block';
 };
 
+// ── PRODUCT TYPES ──────────────────────────────────────────────────────
+const DEFAULT_TYPES = [
+  {id:'skinny20', name:'20oz Skinny', icon:'🥤', price:'From $30', shape:'skinny', visible:true},
+  {id:'glass16',  name:'Glass Cup',   icon:'🧊', price:'From $28', shape:'glass',  visible:true},
+  {id:'mug12',    name:'Coffee Mug',  icon:'☕', price:'From $25', shape:'mug',    visible:true},
+  {id:'tumbler30',name:'30oz Tumbler',icon:'🫙', price:'From $38', shape:'wide',   visible:true},
+  {id:'bottle',   name:'Water Bottle',icon:'💧', price:'From $35', shape:'bottle', visible:true},
+];
+function loadProductTypes() {
+  const saved = JSON.parse(localStorage.getItem('dc_product_types') || 'null');
+  const types = saved || DEFAULT_TYPES;
+  const grid = document.getElementById('productTypeGrid');
+  grid.innerHTML = '';
+  const visible = types.filter(t => t.visible !== false);
+  if (visible.length <= 1) {
+    document.getElementById('productTypeGroup').style.display = 'none';
+    return;
+  }
+  visible.forEach((t, i) => {
+    const card = document.createElement('div');
+    card.className = 'pt-card' + (i === 0 ? ' active' : '');
+    card.innerHTML = `<div class="pt-icon">${t.icon}</div><div class="pt-name">${t.name}</div><div class="pt-price">${t.price}</div>`;
+    card.onclick = () => {
+      document.querySelectorAll('.pt-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      document.getElementById('productBadge').textContent = `${t.name} · durecreates`;
+      // Update hidden product field
+      document.getElementById('hProduct').value = t.name;
+    };
+    grid.appendChild(card);
+  });
+}
+
+// ── WRAP UPLOAD (quick upload from options panel) ───────────────────────
+window.handleWrapUpload = (input) => {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      STATE.customDesignImg = img;
+      STATE.pattern = '_custom';
+      document.querySelectorAll('.pbtn, .design-thumb').forEach(b => b.classList.remove('active'));
+      updateTexture();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+};
+
+// ── DRAW TOOL ──────────────────────────────────────────────────────────
+const DRAW_COLORS = ['#1E0F1E','#FFFFFF','#E8829A','#C9547A','#C9A87C','#4ECDC4','#FFD93D','#87CEEB','#9B59B6','#FF6B6B','#A8E6CF','#F5C8D8'];
+let drawMode = 'pen', drawColor = '#E8829A', drawSize = 10, drawActive = false;
+let drawCtx, lastX = 0, lastY = 0;
+
+function initDrawTool() {
+  const dc = document.getElementById('drawCanvas');
+  drawCtx = dc.getContext('2d');
+  drawCtx.fillStyle = '#FFFFFF';
+  drawCtx.fillRect(0, 0, dc.width, dc.height);
+
+  // Build color dots
+  const colRow = document.getElementById('drawColors');
+  DRAW_COLORS.forEach((c, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'draw-color-dot' + (i === 2 ? ' active' : '');
+    dot.style.background = c;
+    if (c === '#FFFFFF') dot.style.border = '2px solid #ddd';
+    dot.onclick = () => {
+      drawColor = c; drawMode = 'pen';
+      document.querySelectorAll('.draw-color-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      document.getElementById('drawPenBtn').classList.add('active');
+      document.getElementById('drawEraserBtn').classList.remove('active');
+    };
+    colRow.appendChild(dot);
+  });
+
+  // Draw events
+  const getPos = (e) => {
+    const rect = dc.getBoundingClientRect();
+    const scaleX = dc.width / rect.width;
+    const scaleY = dc.height / rect.height;
+    const src = e.touches ? e.touches[0] : e;
+    return { x: (src.clientX - rect.left) * scaleX, y: (src.clientY - rect.top) * scaleY };
+  };
+  const start = (e) => { e.preventDefault(); drawActive = true; const p = getPos(e); lastX = p.x; lastY = p.y; };
+  const move  = (e) => {
+    e.preventDefault(); if (!drawActive) return;
+    const p = getPos(e);
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastX, lastY);
+    drawCtx.lineTo(p.x, p.y);
+    drawCtx.strokeStyle = drawMode === 'eraser' ? '#FFFFFF' : drawColor;
+    drawCtx.lineWidth = drawMode === 'eraser' ? drawSize * 3 : drawSize;
+    drawCtx.lineCap = 'round'; drawCtx.lineJoin = 'round';
+    drawCtx.stroke();
+    lastX = p.x; lastY = p.y;
+  };
+  const end = () => { drawActive = false; };
+  dc.addEventListener('mousedown', start); dc.addEventListener('mousemove', move);
+  dc.addEventListener('mouseup', end); dc.addEventListener('mouseleave', end);
+  dc.addEventListener('touchstart', start, {passive:false}); dc.addEventListener('touchmove', move, {passive:false});
+  dc.addEventListener('touchend', end);
+}
+
+window.openDrawTool = () => {
+  if (!drawCtx) initDrawTool();
+  document.getElementById('drawOverlay').classList.add('open');
+};
+window.closeDrawTool = () => document.getElementById('drawOverlay').classList.remove('open');
+window.drawOverlayBg = (e) => { if (e.target === document.getElementById('drawOverlay')) window.closeDrawTool(); };
+window.setDrawMode = (mode, btn) => {
+  drawMode = mode;
+  document.querySelectorAll('.draw-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+};
+window.clearDrawCanvas = () => {
+  const dc = document.getElementById('drawCanvas');
+  drawCtx.fillStyle = '#FFFFFF';
+  drawCtx.fillRect(0, 0, dc.width, dc.height);
+};
+window.updateDrawSize = (v) => { drawSize = parseInt(v); document.getElementById('drawSizeVal').textContent = v; };
+window.applyDrawing = () => {
+  const dc = document.getElementById('drawCanvas');
+  const img = new Image();
+  img.onload = () => {
+    STATE.customDesignImg = img;
+    STATE.pattern = '_custom';
+    document.querySelectorAll('.pbtn, .design-thumb').forEach(b => b.classList.remove('active'));
+    updateTexture();
+    window.closeDrawTool();
+  };
+  img.src = dc.toDataURL();
+};
+window.handleDrawUpload = (input) => {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      if (!drawCtx) initDrawTool();
+      const dc = document.getElementById('drawCanvas');
+      drawCtx.clearRect(0, 0, dc.width, dc.height);
+      drawCtx.drawImage(img, 0, 0, dc.width, dc.height);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
 // ── NAV SCROLL ─────────────────────────────────────────────────────────
 window.addEventListener('scroll',()=>{ document.getElementById('mainNav').classList.toggle('scrolled',scrollY>50); });
 
@@ -1228,6 +1495,7 @@ buildTexture(mainScn);
 buildTexture(heroScn);
 buildGallery();
 loadAdminDesigns();
+loadProductTypes();
 
 // ── GSAP ANIMATIONS ────────────────────────────────────────────────────
 gsap.registerPlugin(ScrollTrigger);

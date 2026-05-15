@@ -343,6 +343,7 @@ body{font-family:var(--ff-b);background:var(--soft);color:var(--plum);min-height
   <div class="nav-item" data-tab="products" onclick="setTab(this)"><span class="icon">🛍️</span> Products</div>
   <div class="nav-item" data-tab="gallery" onclick="setTab(this)"><span class="icon">🖼️</span> Gallery</div>
   <div class="nav-item" data-tab="designs" onclick="setTab(this)"><span class="icon">🎨</span> Wrap Designs</div>
+  <div class="nav-item" data-tab="ptypes" onclick="setTab(this)"><span class="icon">🏷️</span> Product Types</div>
   <div class="nav-item" data-tab="orders" onclick="setTab(this)"><span class="icon">📦</span> Orders</div>
   <div class="nav-item" data-tab="settings" onclick="setTab(this)"><span class="icon">⚙️</span> Settings</div>
   <div class="sidebar-bottom">
@@ -459,6 +460,22 @@ body{font-family:var(--ff-b);background:var(--soft);color:var(--plum);min-height
       <div class="empty-state" id="designsEmpty" style="display:none;">
         <div class="e-icon">🎨</div>
         <p>No wrap designs yet. Upload your design images above.</p>
+      </div>
+    </div>
+
+    <!-- PRODUCT TYPES -->
+    <div class="tab-panel" id="tab-ptypes">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+          <h2 style="font-family:var(--ff-h);font-size:1.4rem;margin-bottom:4px;">Product Types</h2>
+          <p style="font-size:0.85rem;color:var(--muted);">Define what customers can order on your site. Toggle to show/hide. Drag to reorder.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openPTypeModal()">＋ Add Product Type</button>
+      </div>
+      <div class="products-grid" id="ptypesGrid"></div>
+      <div class="empty-state" id="ptypesEmpty" style="display:none;">
+        <div class="e-icon">🏷️</div>
+        <p>No product types yet. Add your first one above.</p>
       </div>
     </div>
 
@@ -581,6 +598,39 @@ body{font-family:var(--ff-b);background:var(--soft);color:var(--plum);min-height
   </div>
 </div>
 
+<!-- PRODUCT TYPE MODAL -->
+<div class="modal-overlay" id="ptypeModal">
+  <div class="modal-box">
+    <h3 id="ptypeModalTitle">Add Product Type</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Product Name *</label><input id="ptName" placeholder="e.g. 20oz Skinny Tumbler"></div>
+      <div class="form-group"><label>Emoji Icon</label><input id="ptIcon" placeholder="🥤" maxlength="2"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Price Label</label><input id="ptPrice" placeholder="From $30"></div>
+      <div class="form-group"><label>Category</label>
+        <select id="ptShape">
+          <option value="skinny">Skinny Tumbler</option>
+          <option value="wide">Wide Tumbler</option>
+          <option value="glass">Glass Cup</option>
+          <option value="mug">Coffee Mug</option>
+          <option value="bottle">Water Bottle</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Description (optional)</label><textarea id="ptDesc" placeholder="Brief description shown to customers…"></textarea></div>
+    <div class="toggle-row">
+      <label class="toggle"><input type="checkbox" id="ptVisible" checked><div class="toggle-slider"></div></label>
+      <span class="toggle-label">Show on site</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('ptypeModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePType()">Save Product Type</button>
+    </div>
+  </div>
+</div>
+
 <!-- ORDER MODAL -->
 <div class="modal-overlay" id="orderModal">
   <div class="modal-box">
@@ -647,7 +697,7 @@ if (sessionStorage.getItem('dc_auth')==='1') {
 }
 
 // ── TABS ─────────────────────────────────────────────────────────
-const TAB_TITLES = {dashboard:'Dashboard',products:'Products',gallery:'Gallery',designs:'Wrap Designs',orders:'Orders',settings:'Settings'};
+const TAB_TITLES = {dashboard:'Dashboard',products:'Products',gallery:'Gallery',designs:'Wrap Designs',ptypes:'Product Types',orders:'Orders',settings:'Settings'};
 function setTab(el) {
   const tab = el.dataset.tab;
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -659,6 +709,7 @@ function setTab(el) {
   if(tab==='gallery') renderGallery();
   if(tab==='designs') renderDesigns();
   if(tab==='orders') renderOrders();
+  if(tab==='ptypes') renderPTypes();
   if(tab==='settings') loadSettings();
 }
 
@@ -1045,6 +1096,95 @@ function setupDrop(zoneId,handler){
 }
 setupDrop('galleryDropZone',handleGalleryFiles);
 setupDrop('designDropZone',handleDesignFiles);
+
+// ── PRODUCT TYPES ─────────────────────────────────────────────────
+const DEFAULT_PTYPES = [
+  {id:'skinny20', name:'20oz Skinny', icon:'🥤', price:'From $30', shape:'skinny', desc:'', visible:true},
+  {id:'glass16',  name:'Glass Cup',   icon:'🧊', price:'From $28', shape:'glass',  desc:'', visible:true},
+  {id:'mug12',    name:'Coffee Mug',  icon:'☕', price:'From $25', shape:'mug',    desc:'', visible:true},
+  {id:'tumbler30',name:'30oz Tumbler',icon:'🫙', price:'From $38', shape:'wide',   desc:'', visible:true},
+  {id:'bottle',   name:'Water Bottle',icon:'💧', price:'From $35', shape:'bottle', desc:'', visible:true},
+];
+let editingPTypeId = null;
+function getPTypes() {
+  return JSON.parse(localStorage.getItem('dc_product_types') || JSON.stringify(DEFAULT_PTYPES));
+}
+function openPTypeModal(id=null) {
+  editingPTypeId = id;
+  document.getElementById('ptypeModalTitle').textContent = id ? 'Edit Product Type' : 'Add Product Type';
+  const t = id ? getPTypes().find(x=>x.id===id) : null;
+  document.getElementById('ptName').value  = t?.name  || '';
+  document.getElementById('ptIcon').value  = t?.icon  || '🥤';
+  document.getElementById('ptPrice').value = t?.price || '';
+  document.getElementById('ptShape').value = t?.shape || 'skinny';
+  document.getElementById('ptDesc').value  = t?.desc  || '';
+  document.getElementById('ptVisible').checked = t?.visible !== false;
+  openModal('ptypeModal');
+}
+function savePType() {
+  const name = document.getElementById('ptName').value.trim();
+  if (!name) { toast('Please enter a product name.'); return; }
+  const types = getPTypes();
+  const obj = {
+    id: editingPTypeId || Date.now().toString(),
+    name, icon: document.getElementById('ptIcon').value || '🥤',
+    price: document.getElementById('ptPrice').value.trim(),
+    shape: document.getElementById('ptShape').value,
+    desc:  document.getElementById('ptDesc').value.trim(),
+    visible: document.getElementById('ptVisible').checked
+  };
+  if (editingPTypeId) { const i=types.findIndex(x=>x.id===editingPTypeId); if(i>=0) types[i]=obj; }
+  else types.push(obj);
+  localStorage.setItem('dc_product_types', JSON.stringify(types));
+  closeModal('ptypeModal');
+  renderPTypes();
+  toast('Product type saved! ✓');
+}
+function deletePType(id) {
+  if (!confirm('Remove this product type?')) return;
+  const types = getPTypes().filter(t=>t.id!==id);
+  localStorage.setItem('dc_product_types', JSON.stringify(types));
+  renderPTypes();
+  toast('Product type removed.');
+}
+function togglePTypeVis(id) {
+  const types = getPTypes();
+  const t = types.find(x=>x.id===id);
+  if (t) t.visible = !t.visible;
+  localStorage.setItem('dc_product_types', JSON.stringify(types));
+  renderPTypes();
+}
+function renderPTypes() {
+  const types = getPTypes();
+  const grid = document.getElementById('ptypesGrid');
+  const empty = document.getElementById('ptypesEmpty');
+  if (!types.length) { grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  grid.innerHTML = types.map(t => `
+    <div class="prod-card" data-id="${t.id}">
+      <div class="drag-handle">⠿</div>
+      <div class="vis-badge ${t.visible?'':'hidden-item'}" onclick="togglePTypeVis('${t.id}')">${t.visible?'👁':'🚫'}</div>
+      <div class="prod-img" style="font-size:3rem;">${t.icon}</div>
+      <div class="prod-body">
+        <div class="prod-name">${t.name}</div>
+        <div class="prod-price">${t.price||'Price TBD'}</div>
+        <div class="prod-meta">${t.shape}</div>
+        <div class="prod-actions">
+          <button class="btn btn-outline btn-sm" onclick="openPTypeModal('${t.id}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deletePType('${t.id}')">🗑️</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  new Sortable(grid, {
+    animation:180, handle:'.drag-handle', ghostClass:'sortable-ghost',
+    onEnd: () => {
+      const ids = [...grid.querySelectorAll('.prod-card')].map(c=>c.dataset.id);
+      const sorted = getPTypes().sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
+      localStorage.setItem('dc_product_types', JSON.stringify(sorted));
+    }
+  });
+}
 
 // ── BOOT ─────────────────────────────────────────────────────────
 if(sessionStorage.getItem('dc_auth')==='1'){ initDashboard(); }
