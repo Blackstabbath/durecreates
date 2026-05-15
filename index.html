@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>durecreates — Custom Creations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<style>
+:root {
+  --cream:  #FDF6F0;
+  --plum:   #1E0F1E;
+  --pink:   #E8829A;
+  --blush:  #F5C8D8;
+  --rose:   #C9547A;
+  --gold:   #C9A87C;
+  --white:  #FFFFFF;
+  --soft:   #FAF2F5;
+  --border: rgba(232,130,154,0.18);
+  --ff-h:   'Playfair Display', Georgia, serif;
+  --ff-b:   'Inter', system-ui, sans-serif;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); overflow-x:hidden; }
+
+/* ── SCROLLBAR ─────────────────── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--blush); border-radius:3px; }
+
+/* ── NAV ───────────────────────── */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 0 48px;
+  height: 70px;
+  background: rgba(253,246,240,0.82);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s;
+}
+.nav.scrolled { background: rgba(253,246,240,0.97); }
+.nav-logo {
+  font-family: var(--ff-h);
+  font-size: 1.55rem; font-weight: 700;
+  color: var(--plum); letter-spacing:-0.5px;
+}
+.nav-logo span { color: var(--pink); font-style: italic; }
+.nav-links { display:flex; align-items:center; gap:32px; }
+.nav-links a {
+  font-size:0.88rem; font-weight:500; color: var(--plum);
+  text-decoration:none; opacity:0.7; transition:opacity 0.2s;
+}
+.nav-links a:hover { opacity:1; }
+.nav-cta {
+  background: var(--pink); color:#fff;
+  padding:10px 24px; border-radius:50px;
+  font-size:0.85rem; font-weight:600;
+  text-decoration:none; opacity:1 !important;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(232,130,154,0.4); }
+
+/* ── HERO ──────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 100px 80px 60px;
+  background: var(--plum);
+  position: relative; overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 60% 80% at 65% 50%, rgba(232,130,154,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-orb {
+  position:absolute; border-radius:50%;
+  filter: blur(70px); pointer-events:none; opacity:0;
+}
+.hero-orb-1 { width:400px;height:400px; background:rgba(232,130,154,0.18); top:-80px; right:10%; }
+.hero-orb-2 { width:300px;height:300px; background:rgba(201,168,124,0.12); bottom:10%; right:30%; }
+.hero-orb-3 { width:200px;height:200px; background:rgba(245,200,216,0.1); top:30%; left:35%; }
+
+.hero-left { position:relative; z-index:2; }
+.hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  background: rgba(245,200,216,0.1);
+  border: 1px solid rgba(245,200,216,0.3);
+  color: var(--blush); font-size:0.8rem; font-weight:500;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:8px 18px; border-radius:50px; margin-bottom:28px;
+  opacity:0;
+}
+.hero-title {
+  font-family: var(--ff-h);
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight:800; color:#fff;
+  line-height:1.05; letter-spacing:-2px;
+  margin-bottom: 24px;
+}
+.hero-title .italic { font-style:italic; color: var(--blush); }
+.hero-title .line { display:block; overflow:hidden; }
+.hero-title .line-inner { display:block; transform:translateY(100%); }
+.hero-sub {
+  font-size:1.05rem; color:rgba(255,255,255,0.55);
+  max-width:420px; line-height:1.7; margin-bottom:40px; opacity:0;
+}
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; opacity:0; }
+.btn-hero-primary {
+  background: var(--pink); color:#fff;
+  padding:16px 36px; border-radius:50px;
+  font-size:0.95rem; font-weight:700;
+  text-decoration:none; letter-spacing:0.3px;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.btn-hero-primary:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(232,130,154,0.5); }
+.btn-hero-secondary {
+  background: transparent; color:rgba(255,255,255,0.8);
+  padding:16px 36px; border-radius:50px;
+  border:1px solid rgba(255,255,255,0.2);
+  font-size:0.95rem; font-weight:500;
+  text-decoration:none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-hero-secondary:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+
+.hero-right {
+  display:flex; justify-content:center; align-items:center;
+  position:relative; z-index:2;
+}
+#heroTumbler { border-radius:24px; opacity:0; cursor:grab; }
+#heroTumbler:active { cursor:grabbing; }
+.hero-spin-hint {
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  color:rgba(255,255,255,0.35); font-size:0.75rem; letter-spacing:1px;
+  display:flex; align-items:center; gap:6px;
+}
+.spin-icon { animation: spinAnim 3s linear infinite; font-size:0.9rem; }
+@keyframes spinAnim { to { transform:rotate(360deg); } }
+
+/* Floating decorations */
+.hero-deco {
+  position:absolute; pointer-events:none;
+  color: var(--blush); font-size:1.4rem; opacity:0;
+}
+
+/* ── SECTION HEADERS ───────────── */
+.section-header { text-align:center; margin-bottom:56px; }
+.section-tag {
+  display:inline-block;
+  color: var(--pink); font-size:0.78rem; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:14px;
+}
+.section-title {
+  font-family: var(--ff-h);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight:700; letter-spacing:-1px;
+  line-height:1.1;
+}
+.section-title em { font-style:italic; color:var(--pink); }
+.section-sub {
+  margin-top:14px;
+  color: rgba(30,15,30,0.55);
+  font-size:1rem; max-width:480px; margin-left:auto; margin-right:auto;
+}
+
+/* ── CUSTOMIZER ────────────────── */
+.customizer-section {
+  background: var(--soft);
+  padding: 100px 80px;
+}
+.customizer-wrap {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:start;
+}
+
+/* 3D Canvas */
+.tumbler-stage {
+  position:sticky; top:100px;
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+}
+#tumblerCanvas {
+  border-radius:20px;
+  filter: drop-shadow(0 20px 60px rgba(30,15,30,0.2));
+  cursor:grab;
+  background: transparent;
+}
+#tumblerCanvas:active { cursor:grabbing; }
+.stage-controls {
+  display:flex; gap:12px; align-items:center;
+}
+.stage-btn {
+  width:38px;height:38px;
+  background:#fff; border:1px solid var(--border);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:0.9rem; transition:all 0.2s;
+  color: var(--plum);
+}
+.stage-btn:hover { background:var(--pink); color:#fff; border-color:var(--pink); }
+.auto-rotate-btn.active { background:var(--pink); color:#fff; border-color:var(--pink); }
+.product-pill {
+  background: var(--plum); color: var(--blush);
+  padding:8px 20px; border-radius:50px;
+  font-size:0.8rem; font-weight:600; letter-spacing:1px;
+}
+
+/* Options */
+.options-panel { display:flex; flex-direction:column; gap:36px; padding-top:8px; }
+
+.opt-group {}
+.opt-label {
+  font-size:0.72rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:2px;
+  color: rgba(30,15,30,0.45);
+  margin-bottom:14px; display:block;
+}
+.opt-divider { height:1px; background:var(--border); margin:4px 0 20px; }
+
+/* Color swatches */
+.color-grid { display:flex; flex-wrap:wrap; gap:10px; }
+.cswatch {
+  width:34px; height:34px; border-radius:50%;
+  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
+  position:relative;
+}
+.cswatch::after {
+  content:''; position:absolute; inset:-4px;
+  border-radius:50%; border:2px solid transparent;
+  transition:border-color 0.2s;
+}
+.cswatch:hover { transform:scale(1.15); }
+.cswatch.active::after { border-color:var(--plum); }
+.cswatch.active { transform:scale(1.1); }
+
+/* Pattern grid */
+.pgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.pbtn {
+  height:56px; border:2px solid var(--border);
+  border-radius:12px; cursor:pointer;
+  overflow:hidden; background:none; padding:0;
+  position:relative; transition:border-color 0.2s, transform 0.15s;
+}
+.pbtn canvas { width:100%;height:100%;display:block;pointer-events:none; }
+.pbtn span {
+  position:absolute; bottom:4px; left:0; right:0;
+  text-align:center; font-size:0.58rem; font-weight:700;
+  color:rgba(30,15,30,0.6); text-shadow:0 1px 3px rgba(255,255,255,0.9);
+  pointer-events:none;
+}
+.pbtn:hover { border-color:var(--pink); transform:scale(1.04); }
+.pbtn.active { border-color:var(--pink); box-shadow:0 0 0 2px rgba(232,130,154,0.4); }
+
+/* Upload designs */
+.upload-designs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.design-thumb {
+  height:60px; border-radius:10px; overflow:hidden;
+  border:2px solid var(--border); cursor:pointer;
+  transition:border-color 0.2s, transform 0.15s;
+  background:#eee;
+}
+.design-thumb img { width:100%;height:100%;object-fit:cover; }
+.design-thumb:hover { border-color:var(--pink); transform:scale(1.04); }
+.design-thumb.active { border-color:var(--pink); box-shadow:0 0 0 2px rgba(232,130,154,0.4); }
+
+/* Text inputs */
+.text-row { display:flex; flex-direction:column; gap:10px; }
+.text-row input {
+  width:100%; padding:13px 18px;
+  border:2px solid var(--border);
+  border-radius:12px; font-size:0.93rem;
+  font-family:var(--ff-b); background:var(--white);
+  color:var(--plum); outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.text-row input:focus { border-color:var(--pink); box-shadow:0 0 0 4px rgba(232,130,154,0.12); }
+
+/* Font grid */
+.fgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.fbtn {
+  padding:12px 10px; border:2px solid var(--border);
+  border-radius:12px; cursor:pointer; background:var(--white);
+  font-size:1rem; text-align:center; transition:all 0.2s;
+  color:var(--plum);
+}
+.fbtn:hover { border-color:var(--pink); background:rgba(232,130,154,0.05); }
+.fbtn.active { border-color:var(--pink); background:rgba(232,130,154,0.1); color:var(--rose); }
+
+/* Text colors */
+.tcolor-row { display:flex; gap:9px; flex-wrap:wrap; }
+.tcswatch {
+  width:28px; height:28px; border-radius:50%;
+  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
+  position:relative;
+}
+.tcswatch::after {
+  content:''; position:absolute; inset:-3px;
+  border-radius:50%; border:2px solid transparent; transition:border-color 0.2s;
+}
+.tcswatch:hover { transform:scale(1.18); }
+.tcswatch.active::after { border-color:var(--plum); }
+
+/* Order btn */
+.order-btn-wrap { padding-top:8px; }
+.btn-order {
+  width:100%; padding:18px;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--pink) 100%);
+  color:#fff; border:none; border-radius:16px;
+  font-family:var(--ff-b); font-size:1rem; font-weight:700;
+  cursor:pointer; letter-spacing:0.5px;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position:relative; overflow:hidden;
+}
+.btn-order::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  pointer-events:none;
+}
+.btn-order:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(201,84,122,0.45); }
+
+/* ── GALLERY ───────────────────── */
+.gallery-section { padding:100px 80px; background:var(--white); }
+.gallery-grid {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:24px;
+}
+.gcard {
+  background:var(--soft); border-radius:20px;
+  overflow:hidden; position:relative;
+  cursor:pointer;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+}
+.gcard:hover { transform:translateY(-8px) scale(1.02); box-shadow:0 24px 60px rgba(30,15,30,0.12); }
+.gcard-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+.gcard-img-placeholder {
+  width:100%; aspect-ratio:3/4;
+  background:linear-gradient(135deg, var(--blush) 0%, var(--cream) 100%);
+  display:flex; align-items:center; justify-content:center; font-size:3rem;
+}
+.gcard-body { padding:20px; }
+.gcard-name { font-family:var(--ff-h); font-size:1.05rem; font-weight:600; margin-bottom:4px; }
+.gcard-meta { font-size:0.82rem; color:rgba(30,15,30,0.45); }
+.gcard-tag {
+  position:absolute; top:14px; right:14px;
+  background:var(--pink); color:#fff;
+  padding:4px 12px; border-radius:50px;
+  font-size:0.72rem; font-weight:700; letter-spacing:0.5px;
+}
+.gallery-empty {
+  grid-column:1/-1; text-align:center; padding:80px 20px;
+  color:rgba(30,15,30,0.35);
+}
+.gallery-empty .empty-icon { font-size:3rem; margin-bottom:16px; }
+.gallery-empty p { font-size:0.95rem; }
+
+/* ── MARQUEE ───────────────────── */
+.marquee-section { background:var(--plum); padding:22px 0; overflow:hidden; }
+.marquee-track {
+  display:flex; gap:60px; white-space:nowrap;
+  animation: marquee 20s linear infinite;
+}
+.marquee-item {
+  color: var(--blush); font-family:var(--ff-h);
+  font-size:1rem; font-style:italic; flex-shrink:0;
+  display:flex; align-items:center; gap:12px;
+}
+.marquee-dot { width:6px;height:6px;border-radius:50%;background:var(--pink);flex-shrink:0; }
+@keyframes marquee { to { transform:translateX(-50%); } }
+
+/* ── PROCESS ───────────────────── */
+.process-section { padding:100px 80px; background:var(--cream); }
+.process-grid {
+  max-width:1000px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:32px;
+}
+.pstep {
+  text-align:center; padding:40px 24px;
+  background:var(--white); border-radius:24px;
+  border:1px solid var(--border);
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.pstep:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(30,15,30,0.08); }
+.pstep-num {
+  width:56px;height:56px;
+  background:linear-gradient(135deg, var(--rose), var(--pink));
+  color:#fff; border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-h); font-size:1.4rem; font-weight:800;
+  margin:0 auto 20px;
+  box-shadow:0 8px 20px rgba(232,130,154,0.35);
+}
+.pstep-icon { font-size:1.8rem; margin-bottom:12px; }
+.pstep h3 { font-family:var(--ff-h); font-size:1.1rem; margin-bottom:10px; }
+.pstep p { font-size:0.88rem; color:rgba(30,15,30,0.5); line-height:1.7; }
+
+/* ── MODAL ─────────────────────── */
+.overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(30,15,30,0.75);
+  backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px; opacity:0; pointer-events:none;
+  transition:opacity 0.3s;
+}
+.overlay.open { opacity:1; pointer-events:all; }
+.modal {
+  background:var(--white); border-radius:28px;
+  padding:48px; max-width:540px; width:100%;
+  max-height:92vh; overflow-y:auto;
+  transform:translateY(32px) scale(0.97);
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.overlay.open .modal { transform:none; }
+.modal-head { margin-bottom:8px; }
+.modal-head h2 { font-family:var(--ff-h); font-size:1.9rem; font-weight:800; }
+.modal-sub { color:rgba(30,15,30,0.45); font-size:0.9rem; margin-bottom:26px; }
+.order-summary {
+  background:rgba(232,130,154,0.08);
+  border:1px solid var(--border);
+  border-radius:16px; padding:18px 20px; margin-bottom:28px;
+}
+.order-summary h4 {
+  font-size:0.72rem; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--pink); margin-bottom:10px;
+}
+.order-summary p { font-size:0.88rem; color:var(--plum); margin:4px 0; }
+.fg { margin-bottom:14px; }
+.fg label { display:block; font-size:0.8rem; font-weight:600; margin-bottom:5px; color:var(--plum); }
+.fg input, .fg textarea, .fg select {
+  width:100%; padding:12px 16px;
+  border:2px solid var(--border); border-radius:12px;
+  font-size:0.92rem; font-family:var(--ff-b);
+  background:var(--soft); color:var(--plum); outline:none;
+  transition:border-color 0.2s;
+}
+.fg input:focus, .fg textarea:focus, .fg select:focus { border-color:var(--pink); }
+.fg textarea { height:88px; resize:vertical; }
+.fg-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.modal-footer { display:flex; gap:12px; margin-top:24px; }
+.btn-cancel {
+  padding:14px 22px; border-radius:12px;
+  background:var(--soft); border:2px solid var(--border);
+  font-size:0.93rem; cursor:pointer; color:var(--plum);
+  transition:all 0.2s;
+}
+.btn-cancel:hover { border-color:var(--pink); }
+.btn-submit {
+  flex:1; padding:14px;
+  background:linear-gradient(135deg, var(--rose), var(--pink));
+  color:#fff; border:none; border-radius:12px;
+  font-size:0.95rem; font-weight:700; cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-submit:hover { transform:translateY(-1px); box-shadow:0 8px 20px rgba(201,84,122,0.4); }
+.btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+.success-view { display:none; text-align:center; padding:20px 0; }
+.success-view .s-emoji { font-size:3.5rem; margin-bottom:16px; }
+.success-view h3 { font-family:var(--ff-h); font-size:1.6rem; margin-bottom:10px; }
+.success-view p { color:rgba(30,15,30,0.5); font-size:0.9rem; line-height:1.8; }
+
+/* ── FOOTER ────────────────────── */
+footer {
+  background:var(--plum); color:rgba(255,255,255,0.5);
+  padding:60px 80px 40px;
+}
+.footer-grid {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:2fr 1fr 1fr;
+  gap:48px; margin-bottom:48px;
+}
+.footer-brand .logo { font-family:var(--ff-h); font-size:1.5rem; font-weight:700; color:#fff; margin-bottom:12px; }
+.footer-brand .logo span { color:var(--pink); font-style:italic; }
+.footer-brand p { font-size:0.88rem; line-height:1.7; max-width:280px; }
+.footer-col h4 { color:#fff; font-size:0.82rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
+.footer-col a { display:block; color:rgba(255,255,255,0.45); text-decoration:none; font-size:0.88rem; margin-bottom:8px; transition:color 0.2s; }
+.footer-col a:hover { color:var(--pink); }
+.footer-bottom {
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding-top:28px; text-align:center;
+  font-size:0.82rem;
+}
+
+/* ── RESPONSIVE ────────────────── */
+@media (max-width:900px) {
+  .hero { grid-template-columns:1fr; padding:100px 28px 60px; text-align:center; }
+  .hero-sub { margin:0 auto 32px; }
+  .hero-btns { justify-content:center; }
+  .hero-right { margin-top:40px; }
+  .customizer-section { padding:70px 28px; }
+  .customizer-wrap { grid-template-columns:1fr; gap:48px; }
+  .tumbler-stage { position:static; }
+  .gallery-section { padding:70px 28px; }
+  .process-section { padding:70px 28px; }
+  .process-grid { grid-template-columns:1fr; }
+  .modal { padding:28px 22px; }
+  .fg-row { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; gap:32px; }
+  footer { padding:48px 28px 32px; }
+  .nav { padding:0 20px; }
+  .nav-links { gap:16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">dure<span>creates</span></div>
+  <div class="nav-links">
+    <a href="#customizer">Design</a>
+    <a href="#gallery">Gallery</a>
+    <a href="admin.html" target="_blank" class="nav-cta">Admin ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-deco" style="top:20%;left:5%;font-size:1.2rem;">✦</div>
+  <div class="hero-deco" style="top:70%;left:8%;font-size:0.9rem;">✦</div>
+  <div class="hero-deco" style="top:40%;left:42%;font-size:1.5rem;">❋</div>
+
+  <div class="hero-left">
+    <div class="hero-tag">✦ &nbsp;Handmade in Ontario, Canada</div>
+    <h1 class="hero-title">
+      <span class="line"><span class="line-inner">Custom</span></span>
+      <span class="line"><span class="line-inner italic">Creations</span></span>
+      <span class="line"><span class="line-inner">Made For You</span></span>
+    </h1>
+    <p class="hero-sub">Design your perfect 20oz skinny tumbler — see it live in 3D, then order directly. Handcrafted with heat press &amp; Cricut in the GTA.</p>
+    <div class="hero-btns">
+      <a href="#customizer" class="btn-hero-primary">Start Designing →</a>
+      <a href="#gallery" class="btn-hero-secondary">See Our Work</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div style="position:relative;">
+      <canvas id="heroTumbler" width="320" height="440"></canvas>
+      <div class="hero-spin-hint"><span class="spin-icon">↻</span> drag to spin</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item"><span class="marquee-dot"></span>Custom Tumblers</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Heat Press</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cricut Designs</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Glass Cups</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>GTA Local</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Custom Gifts</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bookmarks</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Apparel</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Custom Tumblers</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Heat Press</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cricut Designs</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Glass Cups</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>GTA Local</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Custom Gifts</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bookmarks</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Apparel</span>
+  </div>
+</div>
+
+<!-- CUSTOMIZER -->
+<section class="customizer-section" id="customizer">
+  <div class="section-header">
+    <div class="section-tag">Design Studio</div>
+    <h2 class="section-title">Create Your <em>20oz Skinny</em> Tumbler</h2>
+    <p class="section-sub">Spin to see every angle. Your design updates in real time.</p>
+  </div>
+  <div class="customizer-wrap">
+
+    <!-- 3D Stage -->
+    <div class="tumbler-stage">
+      <canvas id="tumblerCanvas" width="380" height="480"></canvas>
+      <div class="stage-controls">
+        <button class="stage-btn auto-rotate-btn active" id="rotateBtn" title="Toggle auto-rotate" onclick="toggleRotate()">↻</button>
+        <button class="stage-btn" title="Reset view" onclick="resetView()">⊙</button>
+      </div>
+      <div class="product-pill">20oz Skinny Tumbler · durecreates</div>
+    </div>
+
+    <!-- Options -->
+    <div class="options-panel">
+
+      <div class="opt-group">
+        <span class="opt-label">Base Color</span>
+        <div class="color-grid" id="colorGrid"></div>
+      </div>
+      <div class="opt-divider"></div>
+
+      <div class="opt-group">
+        <span class="opt-label">Wrap Design</span>
+        <div class="pgrid" id="patternGrid"></div>
+        <div id="adminDesignsRow" style="margin-top:12px;display:none;">
+          <span class="opt-label" style="margin-bottom:10px;display:block;">Your Uploaded Designs</span>
+          <div class="upload-designs" id="adminDesignsGrid"></div>
+        </div>
+      </div>
+      <div class="opt-divider"></div>
+
+      <div class="opt-group">
+        <span class="opt-label">Your Text</span>
+        <div class="text-row">
+          <input id="t1" type="text" maxlength="20" placeholder="Name or main text  (e.g. Sarah)" oninput="updateTexture()">
+          <input id="t2" type="text" maxlength="26" placeholder="Subtitle  (e.g. Best Mom Ever ✦)" oninput="updateTexture()">
+        </div>
+      </div>
+      <div class="opt-divider"></div>
+
+      <div class="opt-group">
+        <span class="opt-label">Font Style</span>
+        <div class="fgrid">
+          <button class="fbtn active" data-font="script" style="font-family:Georgia,serif;font-style:italic;" onclick="setFont(this)">Script</button>
+          <button class="fbtn" data-font="bold" style="font-family:Impact,Arial,sans-serif;font-weight:900;" onclick="setFont(this)">BOLD</button>
+          <button class="fbtn" data-font="elegant" style="font-family:Georgia,serif;letter-spacing:3px;" onclick="setFont(this)">Elegant</button>
+          <button class="fbtn" data-font="modern" style="font-family:system-ui,sans-serif;font-weight:600;" onclick="setFont(this)">Modern</button>
+        </div>
+      </div>
+      <div class="opt-divider"></div>
+
+      <div class="opt-group">
+        <span class="opt-label">Text Color</span>
+        <div class="tcolor-row" id="tcolorRow"></div>
+      </div>
+      <div class="opt-divider"></div>
+
+      <div class="order-btn-wrap">
+        <button class="btn-order" onclick="openModal()">✦ &nbsp;Place My Order →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="section-header">
+    <div class="section-tag">Our Work</div>
+    <h2 class="section-title">Designs We've <em>Made</em></h2>
+    <p class="section-sub">Browse our creations — each one handcrafted in our GTA studio.</p>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="section-header">
+    <div class="section-tag">The Process</div>
+    <h2 class="section-title">Made With <em>Love</em></h2>
+  </div>
+  <div class="process-grid">
+    <div class="pstep">
+      <div class="pstep-num">1</div>
+      <div class="pstep-icon">🎨</div>
+      <h3>You Design It</h3>
+      <p>Use our 3D customizer to build exactly what you want — colours, patterns, your name.</p>
+    </div>
+    <div class="pstep">
+      <div class="pstep-num">2</div>
+      <div class="pstep-icon">✂️</div>
+      <h3>We Craft It</h3>
+      <p>Your design is cut with precision Cricut and pressed with our professional heat press.</p>
+    </div>
+    <div class="pstep">
+      <div class="pstep-num">3</div>
+      <div class="pstep-icon">📦</div>
+      <h3>You Love It</h3>
+      <p>Pickup in the GTA or local delivery. Ready in days, not weeks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER MODAL -->
+<div class="overlay" id="overlay" onclick="overlayBg(event)">
+  <div class="modal">
+    <div id="formView">
+      <div class="modal-head"><h2>Almost there! 🎉</h2></div>
+      <p class="modal-sub">Fill in your details and we'll confirm within 24 hours.</p>
+      <div class="order-summary" id="orderSummary"></div>
+      <form id="orderForm" onsubmit="submitOrder(event)" action="https://formsubmit.co/warraichmuneeb8@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="✨ New Order — durecreates">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="Product" id="hProduct">
+        <input type="hidden" name="Base Color" id="hColor">
+        <input type="hidden" name="Wrap Design" id="hPattern">
+        <input type="hidden" name="Text Line 1" id="hT1">
+        <input type="hidden" name="Text Line 2" id="hT2">
+        <input type="hidden" name="Font" id="hFont">
+        <div class="fg-row">
+          <div class="fg"><label>First Name *</label><input name="First Name" required placeholder="Jane"></div>
+          <div class="fg"><label>Last Name *</label><input name="Last Name" required placeholder="Smith"></div>
+        </div>
+        <div class="fg"><label>Email *</label><input type="email" name="Email" required placeholder="jane@email.com"></div>
+        <div class="fg"><label>Phone</label><input type="tel" name="Phone" placeholder="(647) 555-0123"></div>
+        <div class="fg"><label>City (GTA) *</label><input name="City" required placeholder="Mississauga, Brampton, Toronto…"></div>
+        <div class="fg"><label>Quantity</label>
+          <select name="Quantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option value="6+">6+ (bulk)</option></select>
+        </div>
+        <div class="fg"><label>Notes / Special Requests</label><textarea name="Notes" placeholder="Rush order, event date, anything special…"></textarea></div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeModal()">← Back</button>
+          <button type="submit" class="btn-submit" id="submitBtn">Send Order Request →</button>
+        </div>
+      </form>
+    </div>
+    <div class="success-view" id="successView">
+      <div class="s-emoji">🎉</div>
+      <h3>Order Sent!</h3>
+      <p>We'll reach out within 24 hours to confirm your design and pricing.<br><br>
+      Follow us <strong>@durecreates</strong> on Instagram for inspo while you wait!</p>
+      <br>
+      <button class="btn-hero-primary" style="font-size:0.9rem;padding:12px 28px;" onclick="closeModal()">Design Another →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">dure<span>creates</span></div>
+      <p>Custom creations handmade with heat press &amp; Cricut in Ontario, Canada 🇨🇦. Serving the GTA with love.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="#customizer">Design a Tumbler</a>
+      <a href="#gallery">Gallery</a>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <a href="https://instagram.com/durecreates" target="_blank">Instagram @durecreates</a>
+      <a href="https://tiktok.com/@durecreates" target="_blank">TikTok @durecreates</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 durecreates — DURE CREATES Custom Creations · Ontario, Canada</p>
+  </div>
+</footer>
+
+<!-- THREE.JS via importmap -->
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.158.0/examples/jsm/"}}
+</script>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ── STATE ──────────────────────────────────────────────────────────────
+const STATE = {
+  color: '#FFFFFF', pattern: 'solid',
+  text1: '', text2: '',
+  font: 'script', textColor: '#1E0F1E',
+  customDesignImg: null
+};
+
+const COLORS = [
+  {n:'White',h:'#FFFFFF'},{n:'Black',h:'#1a1a1a'},{n:'Blush',h:'#F4A7B9'},
+  {n:'Hot Pink',h:'#FF4081'},{n:'Coral',h:'#FF6B6B'},{n:'Peach',h:'#FFAB76'},
+  {n:'Yellow',h:'#FFD93D'},{n:'Mint',h:'#A8E6CF'},{n:'Teal',h:'#4ECDC4'},
+  {n:'Sky',h:'#87CEEB'},{n:'Cobalt',h:'#4169E1'},{n:'Purple',h:'#9B59B6'},
+  {n:'Lavender',h:'#DDA0DD'},{n:'Rose Gold',h:'#C9A984'},{n:'Sage',h:'#8FBC8F'},
+  {n:'Wine',h:'#722F37'},{n:'Plum',h:'#1E0F1E'},{n:'Champagne',h:'#F5E6C8'}
+];
+const TEXT_COLORS = ['#1E0F1E','#FFFFFF','#E8829A','#C9A87C','#4ECDC4','#FFD93D','#9B59B6','#FF6B6B'];
+const PATTERNS = [
+  {id:'solid',n:'Solid'},{id:'floral',n:'Floral'},{id:'bows',n:'Bows'},
+  {id:'butterfly',n:'Butterfly'},{id:'stars',n:'Stars'},{id:'leopard',n:'Leopard'},
+  {id:'marble',n:'Marble'},{id:'confetti',n:'Confetti'}
+];
+const FONTS = {
+  script:  {css:'italic 1em Georgia,serif',      lbl:'Script'},
+  bold:    {css:'900 1em Impact,Arial,sans-serif', lbl:'Bold'},
+  elegant: {css:'1em Georgia,serif',              lbl:'Elegant'},
+  modern:  {css:'600 1em system-ui,sans-serif',   lbl:'Modern'}
+};
+
+// ── MAIN 3D SCENE ──────────────────────────────────────────────────────
+function makeScene(canvasEl) {
+  const W = canvasEl.width, H = canvasEl.height;
+  const renderer = new THREE.WebGLRenderer({canvas:canvasEl, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(W, H);
+  renderer.shadowMap.enabled = true;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, W/H, 0.1, 100);
+  camera.position.set(0, 0, 7.5);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xfff5f0, 0.55));
+  const key = new THREE.DirectionalLight(0xffffff, 1.3);
+  key.position.set(-3, 4, 5); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffe8d8, 0.45);
+  fill.position.set(5, 1, 3); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xf5c8d8, 0.7);
+  rim.position.set(0, 3, -5); scene.add(rim);
+  const bot = new THREE.DirectionalLight(0xffffff, 0.2);
+  bot.position.set(0, -5, 2); scene.add(bot);
+
+  // 20oz Skinny Tumbler geometry
+  const segments = 128;
+  const bodyGeo  = new THREE.CylinderGeometry(1.32, 1.08, 5.6, segments, 1, false);
+  // Top ring (lip)
+  const lipGeo   = new THREE.TorusGeometry(1.33, 0.05, 16, segments);
+  // Bottom ring
+  const baseRingGeo = new THREE.TorusGeometry(1.09, 0.06, 16, segments);
+  // Bottom disc
+  const baseDiscGeo = new THREE.CircleGeometry(1.08, segments);
+
+  // Design texture canvas
+  const texCanvas = document.createElement('canvas');
+  texCanvas.width = 2048; texCanvas.height = 512;
+  const tex = new THREE.CanvasTexture(texCanvas);
+  tex.wrapS = THREE.RepeatWrapping;
+
+  const bodyMat = new THREE.MeshPhysicalMaterial({
+    map: tex, metalness:0.06, roughness:0.22,
+    clearcoat:0.9, clearcoatRoughness:0.08,
+    reflectivity:0.35
+  });
+  const capMat = new THREE.MeshPhysicalMaterial({
+    color:0xdddddd, metalness:0.08, roughness:0.25,
+    clearcoat:0.7, clearcoatRoughness:0.1
+  });
+  const lipMat = new THREE.MeshPhysicalMaterial({
+    color:0xcccccc, metalness:0.1, roughness:0.2,
+    clearcoat:0.8
+  });
+
+  const body = new THREE.Mesh(bodyGeo, [bodyMat, capMat, capMat]);
+  const lip  = new THREE.Mesh(lipGeo, lipMat);
+  lip.position.y = 2.8;
+  const baseRing = new THREE.Mesh(baseRingGeo, lipMat);
+  baseRing.position.y = -2.8;
+  const baseDisc = new THREE.Mesh(baseDiscGeo, capMat);
+  baseDisc.rotation.x = -Math.PI/2;
+  baseDisc.position.y = -2.83;
+
+  const group = new THREE.Group();
+  group.add(body, lip, baseRing, baseDisc);
+  scene.add(group);
+
+  return { renderer, scene, camera, group, tex, texCanvas, bodyMat, capMat, lipMat };
+}
+
+// ── HERO SCENE (simple, no controls) ───────────────────────────────────
+const heroEl = document.getElementById('heroTumbler');
+const heroScn = makeScene(heroEl);
+const heroControls = new OrbitControls(heroScn.camera, heroEl);
+heroControls.enableZoom = false; heroControls.enablePan = false;
+heroControls.autoRotate = true; heroControls.autoRotateSpeed = 1.8;
+heroControls.enableDamping = true; heroControls.dampingFactor = 0.05;
+
+// ── MAIN CUSTOMIZER SCENE ──────────────────────────────────────────────
+const mainEl = document.getElementById('tumblerCanvas');
+const mainScn = makeScene(mainEl);
+const mainControls = new OrbitControls(mainScn.camera, mainEl);
+mainControls.enableZoom = false; mainControls.enablePan = false;
+mainControls.autoRotate = true; mainControls.autoRotateSpeed = 1.5;
+mainControls.enableDamping = true; mainControls.dampingFactor = 0.06;
+mainControls.minPolarAngle = Math.PI/4; mainControls.maxPolarAngle = 3*Math.PI/4;
+
+let autoRotating = true;
+mainControls.addEventListener('start', () => { mainControls.autoRotate = false; });
+mainControls.addEventListener('end', () => {
+  if (autoRotating) setTimeout(() => { mainControls.autoRotate = true; }, 2200);
+});
+
+window.toggleRotate = () => {
+  autoRotating = !autoRotating;
+  mainControls.autoRotate = autoRotating;
+  document.getElementById('rotateBtn').classList.toggle('active', autoRotating);
+};
+window.resetView = () => {
+  mainScn.camera.position.set(0,0,7.5);
+  mainControls.reset();
+};
+
+// ── TEXTURE GENERATION ─────────────────────────────────────────────────
+function rng(seed){ let s=seed; return ()=>{ s=(s*9301+49297)%233280; return s/233280; }; }
+
+function accent1(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  const br=(r*299+g*587+b*114)/1000;
+  if(hex==='#1a1a1a'||hex==='#722F37'||hex==='#1E0F1E') return '#FFD93D';
+  return br>170 ? '#E8829A' : '#FFFFFF';
+}
+function accent2(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return (r*299+g*587+b*114)/1000>170 ? '#C9A87C' : '#F5C8D8';
+}
+
+function buildTexture(scn) {
+  const c = scn.texCanvas, ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.clearRect(0,0,W,H);
+
+  // Base color
+  ctx.fillStyle = STATE.color;
+  ctx.fillRect(0,0,W,H);
+
+  // Custom design image
+  if (STATE.pattern === '_custom' && STATE.customDesignImg) {
+    ctx.drawImage(STATE.customDesignImg, 0, 0, W, H);
+  } else {
+    // Tile pattern 4× across width for full wrap coverage
+    for (let tx=0; tx<4; tx++) {
+      const ox = tx * W/4;
+      ctx.save();
+      ctx.rect(ox, 0, W/4, H); ctx.clip();
+      drawPattern(ctx, ox + W/8, H/2, W/4, H, STATE.pattern);
+      ctx.restore();
+    }
+  }
+
+  // Text — draw at 1/4 and 3/4 positions (front & back of tumbler)
+  if (STATE.text1 || STATE.text2) {
+    [W*0.25, W*0.75].forEach(cx => drawTexText(ctx, cx, H/2, W/4 * 0.88));
+  }
+
+  // Subtle edge shading
+  const leftEdge = ctx.createLinearGradient(0,0,W*0.04,0);
+  leftEdge.addColorStop(0,'rgba(0,0,0,0.18)');
+  leftEdge.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=leftEdge; ctx.fillRect(0,0,W,H);
+  const rightEdge = ctx.createLinearGradient(W*0.96,0,W,0);
+  rightEdge.addColorStop(0,'rgba(0,0,0,0)');
+  rightEdge.addColorStop(1,'rgba(0,0,0,0.18)');
+  ctx.fillStyle=rightEdge; ctx.fillRect(0,0,W,H);
+
+  scn.tex.needsUpdate = true;
+
+  // Update cap color
+  const capHex = STATE.color === '#FFFFFF' ? 0xd0d0d0 : parseInt(STATE.color.replace('#',''), 16);
+  scn.capMat.color.setHex(capHex);
+  scn.lipMat.color.setHex(capHex);
+}
+
+window.updateTexture = () => {
+  STATE.text1 = document.getElementById('t1').value;
+  STATE.text2 = document.getElementById('t2').value;
+  buildTexture(mainScn);
+  buildTexture(heroScn);
+  // Update mini pattern previews
+  rebuildPatternPreviews();
+};
+
+function drawPattern(ctx, cx, cy, w, h, pid) {
+  const r = rng(42), a1=accent1(STATE.color), a2=accent2(STATE.color);
+  if (pid==='solid') return;
+  if (pid==='floral') { for(let i=0;i<8;i++) drawFlower(ctx,cx-w/2+r()*w,cy-h/2+r()*h,10+r()*14,a1,a2); }
+  if (pid==='bows') { for(let i=0;i<6;i++) drawBow(ctx,cx-w/2+r()*w,cy-h/2+r()*h,14+r()*10,a1); }
+  if (pid==='butterfly') { for(let i=0;i<5;i++) drawButterfly(ctx,cx-w/2+r()*w,cy-h/2+r()*h,16+r()*12,a1,a2); }
+  if (pid==='stars') { for(let i=0;i<12;i++) drawStar(ctx,cx-w/2+r()*w,cy-h/2+r()*h,5+r()*9,a1); }
+  if (pid==='leopard') { for(let i=0;i<8;i++) drawSpot(ctx,cx-w/2+r()*w,cy-h/2+r()*h,8+r()*9,5+r()*6,r()*Math.PI,a1); }
+  if (pid==='marble') { drawMarble(ctx,cx,cy,w,h,a1); }
+  if (pid==='confetti') {
+    const cc=[a1,a2,'#FFD93D','#FF6B6B','#87CEEB'];
+    for(let i=0;i<20;i++){
+      const fx=cx-w/2+r()*w,fy=cy-h/2+r()*h,fw=4+r()*8,fh=2+r()*4,fa=r()*Math.PI;
+      ctx.save();ctx.translate(fx,fy);ctx.rotate(fa);
+      ctx.globalAlpha=0.8;ctx.fillStyle=cc[Math.floor(r()*cc.length)];
+      ctx.fillRect(-fw/2,-fh/2,fw,fh);ctx.restore();
+    }
+    ctx.globalAlpha=1;
+  }
+}
+
+function drawFlower(ctx,x,y,s,c1,c2){
+  ctx.save();ctx.globalAlpha=0.72;
+  for(let i=0;i<5;i++){ctx.save();ctx.translate(x,y);ctx.rotate(i/5*Math.PI*2);ctx.beginPath();ctx.ellipse(0,-s*0.62,s*0.28,s*0.64,0,0,Math.PI*2);ctx.fillStyle=i%2===0?c1:c2;ctx.fill();ctx.restore();}
+  ctx.beginPath();ctx.arc(x,y,s*0.28,0,Math.PI*2);ctx.fillStyle='#FFD93D';ctx.fill();ctx.restore();
+}
+function drawBow(ctx,x,y,s,col){
+  ctx.save();ctx.globalAlpha=0.78;ctx.fillStyle=col;
+  // Left wing
+  ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x-s*1.2,y-s*0.8,x-s*1.5,y+s*0.3,x-s*0.1,y+s*0.05);ctx.fill();
+  // Right wing
+  ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x+s*1.2,y-s*0.8,x+s*1.5,y+s*0.3,x+s*0.1,y+s*0.05);ctx.fill();
+  // Knot
+  ctx.beginPath();ctx.arc(x,y,s*0.22,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fill();
+  ctx.restore();
+}
+function drawButterfly(ctx,x,y,s,c1,c2){
+  ctx.save();ctx.globalAlpha=0.75;
+  // Upper wings
+  ctx.beginPath();ctx.ellipse(x-s*0.5,y-s*0.2,s*0.7,s*0.45,Math.PI*0.3,0,Math.PI*2);ctx.fillStyle=c1;ctx.fill();
+  ctx.beginPath();ctx.ellipse(x+s*0.5,y-s*0.2,s*0.7,s*0.45,-Math.PI*0.3,0,Math.PI*2);ctx.fillStyle=c2;ctx.fill();
+  // Lower wings
+  ctx.beginPath();ctx.ellipse(x-s*0.35,y+s*0.3,s*0.45,s*0.32,Math.PI*0.4,0,Math.PI*2);ctx.fillStyle=c1;ctx.globalAlpha=0.55;ctx.fill();
+  ctx.beginPath();ctx.ellipse(x+s*0.35,y+s*0.3,s*0.45,s*0.32,-Math.PI*0.4,0,Math.PI*2);ctx.fillStyle=c2;ctx.fill();
+  // Body
+  ctx.beginPath();ctx.ellipse(x,y,s*0.08,s*0.5,0,0,Math.PI*2);ctx.fillStyle=c1;ctx.globalAlpha=0.9;ctx.fill();
+  ctx.restore();
+}
+function drawStar(ctx,cx,cy,r,col){
+  ctx.save();ctx.globalAlpha=0.82;ctx.beginPath();
+  for(let i=0;i<10;i++){const rr=i%2===0?r:r*0.42,a=i/10*Math.PI*2-Math.PI/2;i===0?ctx.moveTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a)):ctx.lineTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a));}
+  ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.restore();
+}
+function drawSpot(ctx,x,y,rx,ry,a,col){
+  ctx.save();ctx.globalAlpha=0.6;ctx.translate(x,y);ctx.rotate(a);
+  ctx.beginPath();ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);
+  ctx.strokeStyle=col;ctx.lineWidth=3;ctx.stroke();
+  ctx.globalAlpha=0.22;ctx.fillStyle=col;ctx.fill();ctx.restore();
+}
+function drawMarble(ctx,cx,cy,w,h,col){
+  ctx.save();ctx.globalAlpha=0.35;
+  for(let i=0;i<5;i++){
+    const r=rng(i*91+17),sx=cx-w/2+r()*w,ex=cx-w/2+r()*w;
+    const g=ctx.createLinearGradient(sx,cy-h/2,ex,cy+h/2);
+    g.addColorStop(0,'transparent');g.addColorStop(0.5,col);g.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.moveTo(sx,cy-h/2);
+    ctx.bezierCurveTo(sx+(r()-0.5)*w*0.6,cy-h/3,ex+(r()-0.5)*w*0.6,cy+h/3,ex,cy+h/2);
+    ctx.lineWidth=1+r()*5;ctx.strokeStyle=g;ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawTexText(ctx, cx, cy, maxW) {
+  const t1=STATE.text1, t2=STATE.text2;
+  const fc=FONTS[STATE.font].css;
+  ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle=STATE.textColor;ctx.shadowColor='rgba(0,0,0,0.2)';ctx.shadowBlur=8;
+  if(t1&&t2){
+    let s1=Math.max(20,Math.min(52,maxW/(t1.length*0.62)));
+    ctx.font=fc.replace('1em',s1+'px');ctx.fillText(t1,cx,cy-28);
+    let s2=Math.max(14,Math.min(28,maxW/(t2.length*0.60)));
+    ctx.font=(STATE.font==='script'?'italic ':'')+''+s2+'px Georgia,serif';ctx.fillText(t2,cx,cy+24);
+  } else if(t1){
+    let s1=Math.max(20,Math.min(56,maxW/(t1.length*0.62)));
+    ctx.font=fc.replace('1em',s1+'px');ctx.fillText(t1,cx,cy);
+  }
+  ctx.restore();
+}
+
+// ── ANIMATION LOOP ─────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+  heroControls.update();
+  mainControls.update();
+  heroScn.renderer.render(heroScn.scene, heroScn.camera);
+  mainScn.renderer.render(mainScn.scene, mainScn.camera);
+}
+animate();
+
+// ── BUILD CONTROLS ─────────────────────────────────────────────────────
+function buildColorGrid() {
+  const g = document.getElementById('colorGrid');
+  COLORS.forEach(c => {
+    const el = document.createElement('div');
+    el.className='cswatch'+(c.h===STATE.color?' active':'');
+    el.style.background=c.h;
+    if(c.h==='#FFFFFF') el.style.boxShadow='inset 0 0 0 1px #ddd';
+    el.title=c.n;
+    el.onclick=()=>{
+      STATE.color=c.h;
+      document.querySelectorAll('.cswatch').forEach(s=>s.classList.remove('active'));
+      el.classList.add('active');
+      updateTexture();
+    };
+    g.appendChild(el);
+  });
+}
+
+function rebuildPatternPreviews() {
+  document.querySelectorAll('.pbtn canvas').forEach((mc,i)=>{
+    const ctx=mc.getContext('2d');
+    ctx.clearRect(0,0,80,60);
+    ctx.fillStyle=STATE.color;ctx.fillRect(0,0,80,60);
+    ctx.save();ctx.rect(0,0,80,60);ctx.clip();
+    drawPattern(ctx,40,30,80,60,PATTERNS[i].id);
+    ctx.restore();
+  });
+}
+
+function buildPatternGrid() {
+  const g = document.getElementById('patternGrid');
+  PATTERNS.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className='pbtn'+(p.id===STATE.pattern?' active':'');
+    btn.dataset.pid=p.id;
+    const mc=document.createElement('canvas');mc.width=80;mc.height=60;btn.appendChild(mc);
+    const lbl=document.createElement('span');lbl.textContent=p.n;btn.appendChild(lbl);
+    btn.onclick=()=>{
+      STATE.pattern=p.id;STATE.customDesignImg=null;
+      document.querySelectorAll('.pbtn,.design-thumb').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      updateTexture();
+    };
+    g.appendChild(btn);
+  });
+  rebuildPatternPreviews();
+}
+
+function buildTextColors() {
+  const row = document.getElementById('tcolorRow');
+  TEXT_COLORS.forEach(h => {
+    const el=document.createElement('div');
+    el.className='tcswatch'+(h===STATE.textColor?' active':'');
+    el.style.background=h;
+    if(h==='#FFFFFF')el.style.boxShadow='inset 0 0 0 1px #ddd';
+    el.onclick=()=>{
+      STATE.textColor=h;
+      document.querySelectorAll('.tcswatch').forEach(s=>s.classList.remove('active'));
+      el.classList.add('active');
+      updateTexture();
+    };
+    row.appendChild(el);
+  });
+}
+
+window.setFont = (btn) => {
+  STATE.font=btn.dataset.font;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updateTexture();
+};
+
+// ── GALLERY ────────────────────────────────────────────────────────────
+function buildGallery() {
+  const grid=document.getElementById('galleryGrid');
+  const data=JSON.parse(localStorage.getItem('dc_gallery')||'[]');
+  grid.innerHTML='';
+  if(!data.length){
+    grid.innerHTML=`<div class="gallery-empty"><div class="empty-icon">🎨</div><p>Designs coming soon!<br>Follow <strong>@durecreates</strong> on Instagram for a peek.</p></div>`;
+    return;
+  }
+  data.filter(d=>d.visible).forEach(d=>{
+    const card=document.createElement('div');card.className='gcard';
+    card.innerHTML=d.image
+      ?`<img class="gcard-img" src="${d.image}" alt="${d.name}">`
+      :`<div class="gcard-img-placeholder">🥤</div>`;
+    card.innerHTML+=`<div class="gcard-body"><div class="gcard-name">${d.name}</div><div class="gcard-meta">${d.meta||'20oz Skinny Tumbler'}</div></div>`;
+    if(d.featured)card.innerHTML+=`<div class="gcard-tag">Featured</div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── ADMIN DESIGNS IN CUSTOMIZER ────────────────────────────────────────
+function loadAdminDesigns() {
+  const designs=JSON.parse(localStorage.getItem('dc_wraps')||'[]');
+  if(!designs.length)return;
+  const row=document.getElementById('adminDesignsRow');
+  const grid=document.getElementById('adminDesignsGrid');
+  row.style.display='block';
+  designs.filter(d=>d.visible).forEach(d=>{
+    const thumb=document.createElement('div');thumb.className='design-thumb';
+    const img=document.createElement('img');img.src=d.image;img.alt=d.name;
+    thumb.appendChild(img);
+    thumb.onclick=()=>{
+      STATE.pattern='_custom';
+      const image=new Image();image.src=d.image;
+      image.onload=()=>{STATE.customDesignImg=image;updateTexture();};
+      document.querySelectorAll('.pbtn,.design-thumb').forEach(b=>b.classList.remove('active'));
+      thumb.classList.add('active');
+    };
+    grid.appendChild(thumb);
+  });
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────
+window.openModal = () => {
+  const colorName=COLORS.find(c=>c.h===STATE.color)?.n||STATE.color;
+  const patName=PATTERNS.find(p=>p.id===STATE.pattern)?.n||(STATE.pattern==='_custom'?'Custom Upload':'Unknown');
+  document.getElementById('hProduct').value='20oz Skinny Tumbler';
+  document.getElementById('hColor').value=colorName;
+  document.getElementById('hPattern').value=patName;
+  document.getElementById('hT1').value=STATE.text1;
+  document.getElementById('hT2').value=STATE.text2;
+  document.getElementById('hFont').value=FONTS[STATE.font].lbl;
+  document.getElementById('orderSummary').innerHTML=`
+    <h4>Your Design</h4>
+    <p>📦 <b>Product:</b> 20oz Skinny Tumbler</p>
+    <p>🎨 <b>Color:</b> ${colorName}</p>
+    <p>🌀 <b>Wrap:</b> ${patName}</p>
+    ${STATE.text1?`<p>✍️ <b>Text:</b> "${STATE.text1}${STATE.text2?' · '+STATE.text2:''}"</p>`:''}
+    <p>🖊️ <b>Font:</b> ${FONTS[STATE.font].lbl}</p>
+  `;
+  document.getElementById('overlay').classList.add('open');
+};
+window.closeModal = () => {
+  document.getElementById('overlay').classList.remove('open');
+  setTimeout(()=>{
+    document.getElementById('formView').style.display='block';
+    document.getElementById('successView').style.display='none';
+    document.getElementById('submitBtn').textContent='Send Order Request →';
+    document.getElementById('submitBtn').disabled=false;
+  },350);
+};
+window.overlayBg=(e)=>{ if(e.target===document.getElementById('overlay'))window.closeModal(); };
+window.submitOrder=async(e)=>{
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  btn.textContent='Sending…';btn.disabled=true;
+  try{await fetch(e.target.action,{method:'POST',body:new FormData(e.target),headers:{Accept:'application/json'}});}catch(_){}
+  document.getElementById('formView').style.display='none';
+  document.getElementById('successView').style.display='block';
+};
+
+// ── NAV SCROLL ─────────────────────────────────────────────────────────
+window.addEventListener('scroll',()=>{ document.getElementById('mainNav').classList.toggle('scrolled',scrollY>50); });
+
+// ── INIT ───────────────────────────────────────────────────────────────
+buildColorGrid();
+buildPatternGrid();
+buildTextColors();
+buildTexture(mainScn);
+buildTexture(heroScn);
+buildGallery();
+loadAdminDesigns();
+
+// ── GSAP ANIMATIONS ────────────────────────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero orbs
+gsap.to('.hero-orb',{opacity:1,duration:2,stagger:0.3,ease:'power2.out'});
+
+// Hero tag
+gsap.to('.hero-tag',{opacity:1,y:0,duration:0.8,delay:0.3,ease:'power3.out',from:{y:20}});
+gsap.from('.hero-tag',{y:20,duration:0.8,delay:0.3,ease:'power3.out'});
+
+// Hero title lines
+gsap.to('.line-inner',{
+  y:0,duration:1,stagger:0.15,delay:0.5,ease:'power4.out',
+  from:{y:'100%'}
+});
+gsap.from('.line-inner',{y:'100%',duration:1,stagger:0.15,delay:0.5,ease:'power4.out'});
+
+// Hero sub + btns
+gsap.from('.hero-sub',{opacity:0,y:24,duration:0.9,delay:1.1,ease:'power3.out'});
+gsap.to('.hero-sub',{opacity:1,duration:0.1,delay:1.1});
+gsap.from('.hero-btns',{opacity:0,y:20,duration:0.9,delay:1.3,ease:'power3.out'});
+gsap.to('.hero-btns',{opacity:1,duration:0.1,delay:1.3});
+
+// Hero tumbler canvas
+gsap.to('#heroTumbler',{opacity:1,duration:1.2,delay:0.8,ease:'power2.out'});
+
+// Hero deco elements
+gsap.to('.hero-deco',{opacity:0.4,duration:2,stagger:0.4,delay:1,
+  y:-10,repeat:-1,yoyo:true,ease:'power1.inOut'});
+
+// Scroll animations
+gsap.from('.pstep',{
+  opacity:0,y:50,stagger:0.15,duration:0.8,ease:'power3.out',
+  scrollTrigger:{trigger:'.process-grid',start:'top 80%'}
+});
+gsap.from('.gcard',{
+  opacity:0,y:40,scale:0.95,stagger:0.08,duration:0.7,ease:'power3.out',
+  scrollTrigger:{trigger:'#galleryGrid',start:'top 82%'}
+});
+gsap.from('.section-header',{
+  opacity:0,y:30,duration:0.9,ease:'power3.out',stagger:0.1,
+  scrollTrigger:{trigger:'.customizer-section',start:'top 80%'}
+});
+
+</script>
+</body>
+</html>
