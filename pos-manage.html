@@ -420,9 +420,13 @@ html,body{min-height:100vh;font-family:var(--ff-b);background:var(--bg);color:va
       </div>
       <img id="prodImgPreview" class="img-preview">
     </div>
+    <div class="toggle-row" style="margin-bottom:8px;">
+      <label class="toggle-sw"><input type="checkbox" id="pPosVisible" checked><div class="toggle-track"></div></label>
+      <span class="toggle-label">🛒 Show in POS (for selling)</span>
+    </div>
     <div class="toggle-row">
-      <label class="toggle-sw"><input type="checkbox" id="pVisible" checked><div class="toggle-track"></div></label>
-      <span class="toggle-label">Visible in POS</span>
+      <label class="toggle-sw"><input type="checkbox" id="pWebVisible" checked><div class="toggle-track"></div></label>
+      <span class="toggle-label">🌐 Show on Website (for customers)</span>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('productModal')">Cancel</button>
@@ -481,11 +485,15 @@ const DEFAULT_PRODUCTS = [
 const DEFAULT_SETTINGS = {taxRate:0.13,businessName:'durecreates',currency:'CAD',orderCounter:1,city:'Ontario, GTA',instagram:'@durecreates',receiptFooter:'Thank you for shopping at durecreates! ❤'};
 
 const DB = {
-  cats:     () => JSON.parse(localStorage.getItem('dc_pos_cats')     || JSON.stringify(DEFAULT_CATS)),
-  products: () => JSON.parse(localStorage.getItem('dc_pos_products') || JSON.stringify(DEFAULT_PRODUCTS)),
-  orders:   () => JSON.parse(localStorage.getItem('dc_pos_orders')   || '[]'),
-  settings: () => JSON.parse(localStorage.getItem('dc_pos_settings') || JSON.stringify(DEFAULT_SETTINGS)),
-  save(key, data) { localStorage.setItem('dc_pos_'+key, JSON.stringify(data)); }
+  // ─ Unified keys — same data used by POS, website, and this portal ─
+  cats:     () => JSON.parse(localStorage.getItem('dc_categories') || JSON.stringify(DEFAULT_CATS)),
+  products: () => JSON.parse(localStorage.getItem('dc_products')   || JSON.stringify(DEFAULT_PRODUCTS)),
+  orders:   () => JSON.parse(localStorage.getItem('dc_orders')     || '[]'),
+  settings: () => JSON.parse(localStorage.getItem('dc_settings')   || JSON.stringify(DEFAULT_SETTINGS)),
+  save(key, data) {
+    const map = { cats:'dc_categories', products:'dc_products', orders:'dc_orders', settings:'dc_settings' };
+    localStorage.setItem(map[key] || 'dc_'+key, JSON.stringify(data));
+  }
 };
 
 const CAT_COLORS = ['#E8829A','#C9547A','#4ECDC4','#C9A87C','#9B59B6','#4169E1','#4CAF83','#E85555','#F5A623','#FF6B6B','#87CEEB','#FFD93D'];
@@ -533,7 +541,8 @@ function openProductModal(id=null) {
   document.getElementById('pDesc').value  = p?.description||'';
   document.getElementById('pEmoji').value = p?.emoji||'🥤';
   document.getElementById('pStock').value = p?.stock??10;
-  document.getElementById('pVisible').checked = p?.visible!==false;
+  document.getElementById('pPosVisible').checked = p?.posVisible !== false;
+  document.getElementById('pWebVisible').checked = p?.webVisible !== false;
   // Build cat dropdown
   const sel = document.getElementById('pCat');
   sel.innerHTML = DB.cats().filter(c=>c.id!=='all').map(c=>`<option value="${c.id}" ${p?.category===c.id?'selected':''}>${c.icon} ${c.name}</option>`).join('');
@@ -556,12 +565,14 @@ function saveProduct() {
   const products=DB.products();
   const obj={
     id:editingProductId||Date.now().toString(),
-    name,price,
+    name, price,
     description:document.getElementById('pDesc').value.trim(),
     emoji:document.getElementById('pEmoji').value||'🥤',
     stock:parseInt(document.getElementById('pStock').value)||0,
     category:document.getElementById('pCat').value,
-    visible:document.getElementById('pVisible').checked,
+    posVisible:document.getElementById('pPosVisible').checked,
+    webVisible:document.getElementById('pWebVisible').checked,
+    visible:document.getElementById('pPosVisible').checked, // legacy compat
     image:prodImgData||null
   };
   if(editingProductId){const i=products.findIndex(x=>x.id===editingProductId);if(i>=0)products[i]=obj;}
@@ -769,7 +780,9 @@ function loadSettings(){
   `;
 }
 function saveSettings(){
-  const rate=parseFloat(document.getElementById('setTaxRate').value)/100||0.13;
+  // Fix: Never use || here — taxRate of 0 is valid and must not fall back to 0.13
+  const rawRate = parseFloat(document.getElementById('setTaxRate').value);
+  const rate = isNaN(rawRate) ? 0.13 : rawRate / 100;
   const s={...DB.settings(),businessName:document.getElementById('setBusinessName').value,city:document.getElementById('setCity').value,taxRate:rate,currency:document.getElementById('setCurrency').value,instagram:document.getElementById('setInstagram').value,receiptFooter:document.getElementById('setReceiptFooter').value};
   DB.save('settings',s);toast('Settings saved! ✓','success');
 }

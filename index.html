@@ -1252,21 +1252,27 @@ window.setFont = (btn) => {
 };
 
 // ── GALLERY ────────────────────────────────────────────────────────────
+// Reads from unified dc_products (same data as POS + management portal)
 function buildGallery() {
-  const grid=document.getElementById('galleryGrid');
-  const data=JSON.parse(localStorage.getItem('dc_gallery')||'[]');
-  grid.innerHTML='';
-  if(!data.length){
-    grid.innerHTML=`<div class="gallery-empty"><div class="empty-icon">🎨</div><p>Designs coming soon!<br>Follow <strong>@durecreates</strong> on Instagram for a peek.</p></div>`;
+  const grid = document.getElementById('galleryGrid');
+  // Try unified products first, then legacy gallery
+  const unified = JSON.parse(localStorage.getItem('dc_products') || '[]');
+  const legacy  = JSON.parse(localStorage.getItem('dc_gallery')  || '[]');
+  const products = unified.length ? unified.filter(p => p.webVisible !== false && p.image) : legacy.filter(d => d.visible);
+  grid.innerHTML = '';
+  if (!products.length) {
+    grid.innerHTML = `<div class="gallery-empty"><div class="empty-icon">🎨</div><p>Designs coming soon!<br>Follow <strong>@durecreates</strong> on Instagram for a peek.</p></div>`;
     return;
   }
-  data.filter(d=>d.visible).forEach(d=>{
-    const card=document.createElement('div');card.className='gcard';
-    card.innerHTML=d.image
-      ?`<img class="gcard-img" src="${d.image}" alt="${d.name}">`
-      :`<div class="gcard-img-placeholder">🥤</div>`;
-    card.innerHTML+=`<div class="gcard-body"><div class="gcard-name">${d.name}</div><div class="gcard-meta">${d.meta||'20oz Skinny Tumbler'}</div></div>`;
-    if(d.featured)card.innerHTML+=`<div class="gcard-tag">Featured</div>`;
+  products.forEach(p => {
+    const card = document.createElement('div'); card.className = 'gcard';
+    const name = p.name || p.meta || '20oz Skinny Tumbler';
+    const img  = p.image;
+    card.innerHTML = img
+      ? `<img class="gcard-img" src="${img}" alt="${name}">`
+      : `<div class="gcard-img-placeholder">${p.emoji || '🥤'}</div>`;
+    card.innerHTML += `<div class="gcard-body"><div class="gcard-name">${name}</div><div class="gcard-meta">${p.category || p.meta || 'Custom Product'} · $${p.price ? p.price.toFixed(2) : ''}</div></div>`;
+    if (p.featured) card.innerHTML += `<div class="gcard-tag">Featured</div>`;
     grid.appendChild(card);
   });
 }
@@ -1341,8 +1347,13 @@ const DEFAULT_TYPES = [
   {id:'bottle',   name:'Water Bottle',icon:'💧', price:'From $35', shape:'bottle', visible:true},
 ];
 function loadProductTypes() {
+  // Use unified dc_products for web-visible products, fallback to hardcoded defaults
+  const unifiedProducts = JSON.parse(localStorage.getItem('dc_products') || '[]');
+  const webProducts = unifiedProducts.filter(p => p.webVisible !== false);
   const saved = JSON.parse(localStorage.getItem('dc_product_types') || 'null');
-  const types = saved || DEFAULT_TYPES;
+  const types = webProducts.length
+    ? webProducts.map(p => ({id:p.id, name:p.name, icon:p.emoji||'🥤', price:`$${p.price?.toFixed(2)||''}`, visible:true}))
+    : (saved || DEFAULT_TYPES);
   const grid = document.getElementById('productTypeGrid');
   grid.innerHTML = '';
   const visible = types.filter(t => t.visible !== false);

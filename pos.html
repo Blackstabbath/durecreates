@@ -592,14 +592,18 @@ const DEFAULT_SETTINGS = { taxRate:0.13, businessName:'durecreates', currency:'C
 // DATABASE
 // ══════════════════════════════════════════════
 const DB = {
-  cats:     () => JSON.parse(localStorage.getItem('dc_pos_cats')     || JSON.stringify(DEFAULT_CATS)),
-  products: () => JSON.parse(localStorage.getItem('dc_pos_products') || JSON.stringify(DEFAULT_PRODUCTS)),
-  orders:   () => JSON.parse(localStorage.getItem('dc_pos_orders')   || '[]'),
-  settings: () => JSON.parse(localStorage.getItem('dc_pos_settings') || JSON.stringify(DEFAULT_SETTINGS)),
-  save(key, data) { localStorage.setItem('dc_pos_' + key, JSON.stringify(data)); },
+  // ─ Unified keys shared with website, admin, and management portal ─
+  cats:     () => JSON.parse(localStorage.getItem('dc_categories') || JSON.stringify(DEFAULT_CATS)),
+  products: () => JSON.parse(localStorage.getItem('dc_products')   || JSON.stringify(DEFAULT_PRODUCTS)),
+  orders:   () => JSON.parse(localStorage.getItem('dc_orders')     || '[]'),
+  settings: () => JSON.parse(localStorage.getItem('dc_settings')   || JSON.stringify(DEFAULT_SETTINGS)),
+  save(key, data) {
+    const map = { cats:'dc_categories', products:'dc_products', orders:'dc_orders', settings:'dc_settings' };
+    localStorage.setItem(map[key] || 'dc_'+key, JSON.stringify(data));
+  },
   addOrder(order) {
     const orders = this.orders(); orders.unshift(order);
-    localStorage.setItem('dc_pos_orders', JSON.stringify(orders));
+    localStorage.setItem('dc_orders', JSON.stringify(orders));
   },
   decrementStock(items) {
     const products = this.products();
@@ -636,9 +640,15 @@ window.addEventListener('DOMContentLoaded', () => {
   updateSettings();
 });
 
-function updateSettings() {
+function getTaxRate() {
   const s = DB.settings();
-  document.getElementById('taxLabel').textContent = `HST (${(s.taxRate*100).toFixed(0)}%)`;
+  // Fix: taxRate of 0 must NOT fall back to default (0 is falsy, so never use || here)
+  return typeof s.taxRate === 'number' ? s.taxRate : 0.13;
+}
+function updateSettings() {
+  const rate = getTaxRate();
+  const label = rate === 0 ? 'Tax (0% — No Tax)' : `HST (${(rate*100).toFixed(0)}%)`;
+  document.getElementById('taxLabel').textContent = label;
 }
 
 // ══════════════════════════════════════════════
@@ -713,9 +723,10 @@ function renderProducts() {
   const all = DB.products();
   const q = searchQ.toLowerCase().trim();
   const filtered = all.filter(p => {
+    const matchVisible = p.posVisible !== false; // hide if explicitly set false
     const matchCat = activeCat === 'all' || p.category === activeCat;
     const matchQ   = !q || p.name.toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q);
-    return matchCat && matchQ;
+    return matchVisible && matchCat && matchQ;
   });
   const grid = document.getElementById('productsGrid');
   grid.innerHTML = '';
@@ -831,9 +842,8 @@ function renderOrderItems() {
 }
 
 function updateTotals() {
-  const s = DB.settings();
   const sub = ORDER.items.reduce((a,i) => a + i.price*i.qty, 0);
-  const tax = sub * s.taxRate;
+  const tax = sub * getTaxRate();
   const total = sub + tax;
   document.getElementById('totSubtotal').textContent = `$${sub.toFixed(2)}`;
   document.getElementById('totTax').textContent = `$${tax.toFixed(2)}`;
@@ -852,9 +862,8 @@ function setPayment(method, btn) {
 // ══════════════════════════════════════════════
 function completeSale() {
   if (!ORDER.items.length) return;
-  const s = DB.settings();
   const sub = ORDER.items.reduce((a,i) => a + i.price*i.qty, 0);
-  const tax = sub * s.taxRate;
+  const tax = sub * getTaxRate();
   const total = sub + tax;
   const now = new Date();
   const order = {
