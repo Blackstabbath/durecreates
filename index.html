@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>durecreates — Custom Creations</title>
+<title>durecreates — Custom Tumblers & Gifts · Ontario, GTA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <style>
 :root {
+  --bg:     #0D0D1A;
+  --panel:  #100E1E;
   --cream:  #FDF6F0;
   --plum:   #1E0F1E;
   --pink:   #E8829A;
@@ -23,110 +24,114 @@
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior: smooth; }
-body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); overflow-x:hidden; }
+body { font-family: var(--ff-b); background: var(--bg); color: var(--white); overflow-x:hidden; }
 
-/* ── SCROLLBAR ─────────────────── */
 ::-webkit-scrollbar { width:6px; }
-::-webkit-scrollbar-track { background: var(--cream); }
-::-webkit-scrollbar-thumb { background: var(--blush); border-radius:3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(232,130,154,0.3); border-radius:3px; }
 
 /* ── NAV ───────────────────────── */
 .nav {
   position: fixed; top:0; left:0; right:0; z-index:200;
   display: flex; align-items:center; justify-content:space-between;
-  padding: 0 48px;
-  height: 70px;
-  background: rgba(253,246,240,0.82);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.4s;
+  padding: 0 48px; height: 70px;
+  background: transparent;
+  transition: background 0.4s, backdrop-filter 0.4s;
 }
-.nav.scrolled { background: rgba(253,246,240,0.97); }
+.nav.scrolled {
+  background: rgba(13,13,26,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(232,130,154,0.1);
+}
 .nav-logo {
-  font-family: var(--ff-h);
-  font-size: 1.55rem; font-weight: 700;
-  color: var(--plum); letter-spacing:-0.5px;
+  font-family: var(--ff-h); font-size: 1.55rem; font-weight: 700;
+  color: var(--white); letter-spacing:-0.5px;
 }
 .nav-logo span { color: var(--pink); font-style: italic; }
 .nav-links { display:flex; align-items:center; gap:32px; }
 .nav-links a {
-  font-size:0.88rem; font-weight:500; color: var(--plum);
-  text-decoration:none; opacity:0.7; transition:opacity 0.2s;
+  font-size:0.88rem; font-weight:500; color: rgba(255,255,255,0.65);
+  text-decoration:none; transition: color 0.2s;
 }
-.nav-links a:hover { opacity:1; }
+.nav-links a:hover { color: var(--pink); }
 .nav-cta {
   background: var(--pink); color:#fff;
   padding:10px 24px; border-radius:50px;
   font-size:0.85rem; font-weight:600;
-  text-decoration:none; opacity:1 !important;
+  text-decoration:none;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.nav-cta:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(232,130,154,0.4); }
+.nav-cta:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(232,130,154,0.4); color:#fff; }
 
 /* ── HERO ──────────────────────── */
 .hero {
   min-height: 100vh;
-  display: grid; grid-template-columns: 1fr 480px;
+  display: grid; grid-template-columns: 1fr 500px;
   align-items: center;
   padding: 100px 80px 60px;
-  background: var(--plum);
+  background: var(--bg);
   position: relative; overflow:hidden;
 }
 .hero::before {
   content:'';
   position:absolute; inset:0;
-  background: radial-gradient(ellipse 60% 80% at 65% 50%, rgba(232,130,154,0.12) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(232,130,154,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 70%, rgba(201,84,122,0.06) 0%, transparent 60%);
   pointer-events:none;
 }
 .hero-orb {
   position:absolute; border-radius:50%;
-  filter: blur(70px); pointer-events:none; opacity:0;
+  filter: blur(80px); pointer-events:none; opacity:0;
 }
-.hero-orb-1 { width:400px;height:400px; background:rgba(232,130,154,0.18); top:-80px; right:10%; }
-.hero-orb-2 { width:300px;height:300px; background:rgba(201,168,124,0.12); bottom:10%; right:30%; }
-.hero-orb-3 { width:200px;height:200px; background:rgba(245,200,216,0.1); top:30%; left:35%; }
+.hero-orb-1 { width:500px;height:500px; background:rgba(232,130,154,0.12); top:-100px; right:5%; }
+.hero-orb-2 { width:350px;height:350px; background:rgba(201,84,122,0.10); bottom:5%; right:25%; }
+.hero-orb-3 { width:250px;height:250px; background:rgba(245,200,216,0.08); top:35%; left:30%; }
 
 .hero-left { position:relative; z-index:2; }
+
 .hero-tag {
   display:inline-flex; align-items:center; gap:8px;
-  background: rgba(245,200,216,0.1);
-  border: 1px solid rgba(245,200,216,0.3);
-  color: var(--blush); font-size:0.8rem; font-weight:500;
-  letter-spacing:1.5px; text-transform:uppercase;
+  background: rgba(245,200,216,0.08);
+  border: 1px solid rgba(245,200,216,0.25);
+  color: var(--blush); font-size:0.78rem; font-weight:600;
+  letter-spacing:1.8px; text-transform:uppercase;
   padding:8px 18px; border-radius:50px; margin-bottom:28px;
 }
+
+/* CRITICAL: Hero title MUST be visible by default — no opacity:0 or transforms in CSS */
 .hero-title {
   font-family: var(--ff-h);
   font-size: clamp(3rem, 5vw, 5rem);
   font-weight:800; color:#fff;
   line-height:1.05; letter-spacing:-2px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 .hero-title .italic { font-style:italic; color: var(--blush); }
-.hero-title .line { display:block; overflow:hidden; }
-.hero-title .line-inner { display:block; }
+
 .hero-sub {
-  font-size:1.05rem; color:rgba(255,255,255,0.55);
-  max-width:420px; line-height:1.7; margin-bottom:40px;
+  font-size:1.05rem; color:rgba(255,255,255,0.5);
+  max-width:420px; line-height:1.8; margin-bottom:44px;
 }
 .hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
 .btn-hero-primary {
-  background: var(--pink); color:#fff;
-  padding:16px 36px; border-radius:50px;
+  background: linear-gradient(135deg, var(--rose), var(--pink));
+  color:#fff; padding:16px 36px; border-radius:50px;
   font-size:0.95rem; font-weight:700;
   text-decoration:none; letter-spacing:0.3px;
   transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 4px 20px rgba(232,130,154,0.3);
 }
 .btn-hero-primary:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(232,130,154,0.5); }
 .btn-hero-secondary {
-  background: transparent; color:rgba(255,255,255,0.8);
+  background: transparent; color:rgba(255,255,255,0.75);
   padding:16px 36px; border-radius:50px;
   border:1px solid rgba(255,255,255,0.2);
   font-size:0.95rem; font-weight:500;
   text-decoration:none;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
-.btn-hero-secondary:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+.btn-hero-secondary:hover { border-color:var(--pink); color:#fff; background:rgba(232,130,154,0.08); }
 
 .hero-right {
   display:flex; justify-content:center; align-items:center;
@@ -136,51 +141,186 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 #heroTumbler:active { cursor:grabbing; }
 .hero-spin-hint {
   position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-  color:rgba(255,255,255,0.35); font-size:0.75rem; letter-spacing:1px;
+  color:rgba(255,255,255,0.3); font-size:0.75rem; letter-spacing:1px;
   display:flex; align-items:center; gap:6px;
 }
 .spin-icon { animation: spinAnim 3s linear infinite; font-size:0.9rem; }
 @keyframes spinAnim { to { transform:rotate(360deg); } }
 
-/* Floating decorations */
+/* Floating sparkles */
 .hero-deco {
   position:absolute; pointer-events:none;
   color: var(--blush); font-size:1.4rem; opacity:0;
 }
 
+/* ── MARQUEE ───────────────────── */
+.marquee-section {
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(232,130,154,0.1);
+  border-bottom: 1px solid rgba(232,130,154,0.1);
+  padding:20px 0; overflow:hidden;
+}
+.marquee-track {
+  display:flex; gap:60px; white-space:nowrap;
+  animation: marquee 25s linear infinite;
+}
+.marquee-item {
+  color: rgba(245,200,216,0.75); font-family:var(--ff-h);
+  font-size:0.95rem; font-style:italic; flex-shrink:0;
+  display:flex; align-items:center; gap:12px;
+}
+.marquee-dot { width:5px;height:5px;border-radius:50%;background:var(--pink);flex-shrink:0; }
+@keyframes marquee { to { transform:translateX(-50%); } }
+
 /* ── SECTION HEADERS ───────────── */
-.section-header { text-align:center; margin-bottom:56px; }
+.section-header { text-align:center; margin-bottom:64px; }
 .section-tag {
   display:inline-block;
-  color: var(--pink); font-size:0.78rem; font-weight:600;
-  letter-spacing:2px; text-transform:uppercase;
+  color: var(--pink); font-size:0.76rem; font-weight:700;
+  letter-spacing:2.5px; text-transform:uppercase;
   margin-bottom:14px;
 }
 .section-title {
   font-family: var(--ff-h);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight:700; letter-spacing:-1px;
   line-height:1.1;
 }
 .section-title em { font-style:italic; color:var(--pink); }
 .section-sub {
-  margin-top:14px;
-  color: rgba(30,15,30,0.55);
+  margin-top:16px;
+  color: rgba(255,255,255,0.45);
   font-size:1rem; max-width:480px; margin-left:auto; margin-right:auto;
+  line-height:1.7;
 }
+
+/* ── WHAT WE CREATE ────────────── */
+.categories-section {
+  background: var(--cream);
+  padding: 110px 80px;
+}
+.categories-section .section-title { color: var(--plum); }
+.categories-section .section-sub { color: rgba(30,15,30,0.55); }
+.categories-section .section-tag { color: var(--rose); }
+.cat-grid {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.cat-card {
+  background: var(--white);
+  border-radius:24px; padding:36px 28px;
+  border:1px solid rgba(232,130,154,0.12);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+  cursor:default;
+  position:relative; overflow:hidden;
+}
+.cat-card::before {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--rose), var(--pink));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.cat-card:hover::before { transform:scaleX(1); }
+.cat-card:hover { transform:translateY(-8px); box-shadow:0 24px 60px rgba(30,15,30,0.10); }
+.cat-icon { font-size:2.5rem; margin-bottom:16px; }
+.cat-name { font-family:var(--ff-h); font-size:1.15rem; font-weight:700; color:var(--plum); margin-bottom:8px; }
+.cat-desc { font-size:0.88rem; color:rgba(30,15,30,0.5); line-height:1.7; margin-bottom:14px; }
+.cat-price { font-size:0.82rem; font-weight:700; color:var(--pink); }
+
+/* ── GALLERY ───────────────────── */
+.gallery-section {
+  padding:110px 80px;
+  background: var(--bg);
+}
+.gallery-grid {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:24px;
+}
+.gcard {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius:20px; overflow:hidden; position:relative;
+  cursor:pointer;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+}
+.gcard:hover { transform:translateY(-10px) scale(1.02); box-shadow:0 28px 60px rgba(0,0,0,0.4); }
+.gcard-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+.gcard-img-placeholder {
+  width:100%; aspect-ratio:3/4;
+  background:linear-gradient(135deg, rgba(232,130,154,0.15) 0%, rgba(201,84,122,0.08) 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-size:4rem;
+}
+.gcard-body { padding:20px; }
+.gcard-name { font-family:var(--ff-h); font-size:1rem; font-weight:600; color:var(--white); margin-bottom:4px; }
+.gcard-meta { font-size:0.82rem; color:rgba(255,255,255,0.4); }
+.gcard-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(13,13,26,0.9) 0%, transparent 50%);
+  display:flex; align-items:flex-end; justify-content:center;
+  padding-bottom:80px;
+  opacity:0; transition:opacity 0.3s;
+}
+.gcard:hover .gcard-overlay { opacity:1; }
+.gcard-order-btn {
+  background: var(--pink); color:#fff;
+  padding:10px 24px; border-radius:50px;
+  font-size:0.85rem; font-weight:700;
+  text-decoration:none;
+  transform: translateY(10px); transition: transform 0.3s;
+}
+.gcard:hover .gcard-order-btn { transform: translateY(0); }
+.gcard-tag {
+  position:absolute; top:14px; right:14px;
+  background:var(--pink); color:#fff;
+  padding:4px 12px; border-radius:50px;
+  font-size:0.7rem; font-weight:700; letter-spacing:0.5px;
+}
+.gallery-empty {
+  grid-column:1/-1; text-align:center; padding:80px 20px;
+  color:rgba(255,255,255,0.25);
+}
+.gallery-empty .empty-icon { font-size:3.5rem; margin-bottom:16px; }
+.gallery-empty p { font-size:0.95rem; }
+
+/* Placeholder gallery cards */
+.placeholder-cards {
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:24px;
+}
+.placeholder-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius:20px; overflow:hidden;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+}
+.placeholder-card:hover { transform:translateY(-10px); box-shadow:0 28px 60px rgba(0,0,0,0.4); }
+.placeholder-img {
+  width:100%; aspect-ratio:3/4;
+  display:flex; align-items:center; justify-content:center;
+  font-size:4.5rem;
+}
+.placeholder-body { padding:20px; }
+.placeholder-name { font-family:var(--ff-h); font-size:1rem; font-weight:600; color:var(--white); margin-bottom:4px; }
+.placeholder-meta { font-size:0.82rem; color:rgba(255,255,255,0.4); }
 
 /* ── CUSTOMIZER ────────────────── */
 .customizer-section {
-  background: var(--soft);
-  padding: 100px 80px;
+  background: var(--cream);
+  padding: 110px 80px;
 }
+.customizer-section .section-title { color: var(--plum); }
+.customizer-section .section-sub { color: rgba(30,15,30,0.55); }
+.customizer-section .section-tag { color: var(--rose); }
 .customizer-wrap {
   max-width:1200px; margin:0 auto;
   display:grid; grid-template-columns:1fr 1fr;
   gap:80px; align-items:start;
 }
-
-/* 3D Canvas */
 .tumbler-stage {
   position:sticky; top:100px;
   display:flex; flex-direction:column; align-items:center; gap:20px;
@@ -188,19 +328,15 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 #tumblerCanvas {
   border-radius:20px;
   filter: drop-shadow(0 20px 60px rgba(30,15,30,0.2));
-  cursor:grab;
-  background: transparent;
+  cursor:grab; background: transparent;
 }
 #tumblerCanvas:active { cursor:grabbing; }
-.stage-controls {
-  display:flex; gap:12px; align-items:center;
-}
+.stage-controls { display:flex; gap:12px; align-items:center; }
 .stage-btn {
   width:38px;height:38px;
   background:#fff; border:1px solid var(--border);
   border-radius:50%; display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:0.9rem; transition:all 0.2s;
-  color: var(--plum);
+  cursor:pointer; font-size:0.9rem; transition:all 0.2s; color: var(--plum);
 }
 .stage-btn:hover { background:var(--pink); color:#fff; border-color:var(--pink); }
 .auto-rotate-btn.active { background:var(--pink); color:#fff; border-color:var(--pink); }
@@ -209,10 +345,7 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
   padding:8px 20px; border-radius:50px;
   font-size:0.8rem; font-weight:600; letter-spacing:1px;
 }
-
-/* Options */
 .options-panel { display:flex; flex-direction:column; gap:36px; padding-top:8px; }
-
 .opt-group {}
 .opt-label {
   font-size:0.72rem; font-weight:700;
@@ -221,8 +354,6 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
   margin-bottom:14px; display:block;
 }
 .opt-divider { height:1px; background:var(--border); margin:4px 0 20px; }
-
-/* Color swatches */
 .color-grid { display:flex; flex-wrap:wrap; gap:10px; }
 .cswatch {
   width:34px; height:34px; border-radius:50%;
@@ -231,14 +362,11 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 }
 .cswatch::after {
   content:''; position:absolute; inset:-4px;
-  border-radius:50%; border:2px solid transparent;
-  transition:border-color 0.2s;
+  border-radius:50%; border:2px solid transparent; transition:border-color 0.2s;
 }
 .cswatch:hover { transform:scale(1.15); }
 .cswatch.active::after { border-color:var(--plum); }
 .cswatch.active { transform:scale(1.1); }
-
-/* Pattern grid */
 .pgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
 .pbtn {
   height:56px; border:2px solid var(--border);
@@ -255,8 +383,6 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 }
 .pbtn:hover { border-color:var(--pink); transform:scale(1.04); }
 .pbtn.active { border-color:var(--pink); box-shadow:0 0 0 2px rgba(232,130,154,0.4); }
-
-/* Upload designs */
 .upload-designs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .design-thumb {
   height:60px; border-radius:10px; overflow:hidden;
@@ -267,8 +393,6 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 .design-thumb img { width:100%;height:100%;object-fit:cover; }
 .design-thumb:hover { border-color:var(--pink); transform:scale(1.04); }
 .design-thumb.active { border-color:var(--pink); box-shadow:0 0 0 2px rgba(232,130,154,0.4); }
-
-/* Text inputs */
 .text-row { display:flex; flex-direction:column; gap:10px; }
 .text-row input {
   width:100%; padding:13px 18px;
@@ -279,19 +403,14 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
   transition:border-color 0.2s, box-shadow 0.2s;
 }
 .text-row input:focus { border-color:var(--pink); box-shadow:0 0 0 4px rgba(232,130,154,0.12); }
-
-/* Font grid */
 .fgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
 .fbtn {
   padding:12px 10px; border:2px solid var(--border);
   border-radius:12px; cursor:pointer; background:var(--white);
-  font-size:1rem; text-align:center; transition:all 0.2s;
-  color:var(--plum);
+  font-size:1rem; text-align:center; transition:all 0.2s; color:var(--plum);
 }
 .fbtn:hover { border-color:var(--pink); background:rgba(232,130,154,0.05); }
 .fbtn.active { border-color:var(--pink); background:rgba(232,130,154,0.1); color:var(--rose); }
-
-/* Text colors */
 .tcolor-row { display:flex; gap:9px; flex-wrap:wrap; }
 .tcswatch {
   width:28px; height:28px; border-radius:50%;
@@ -304,8 +423,6 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 }
 .tcswatch:hover { transform:scale(1.18); }
 .tcswatch.active::after { border-color:var(--plum); }
-
-/* Order btn */
 .order-btn-wrap { padding-top:8px; }
 .btn-order {
   width:100%; padding:18px;
@@ -323,69 +440,32 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 }
 .btn-order:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(201,84,122,0.45); }
 
-/* ── GALLERY ───────────────────── */
-.gallery-section { padding:100px 80px; background:var(--white); }
-.gallery-grid {
-  max-width:1200px; margin:0 auto;
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
-  gap:24px;
+/* product-type grid */
+.product-type-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
+.pt-card {
+  border:2px solid var(--border); border-radius:14px;
+  padding:14px 10px; cursor:pointer; text-align:center;
+  background:var(--white); transition:all 0.2s; position:relative;
 }
-.gcard {
-  background:var(--soft); border-radius:20px;
-  overflow:hidden; position:relative;
-  cursor:pointer;
-  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-}
-.gcard:hover { transform:translateY(-8px) scale(1.02); box-shadow:0 24px 60px rgba(30,15,30,0.12); }
-.gcard-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
-.gcard-img-placeholder {
-  width:100%; aspect-ratio:3/4;
-  background:linear-gradient(135deg, var(--blush) 0%, var(--cream) 100%);
-  display:flex; align-items:center; justify-content:center; font-size:3rem;
-}
-.gcard-body { padding:20px; }
-.gcard-name { font-family:var(--ff-h); font-size:1.05rem; font-weight:600; margin-bottom:4px; }
-.gcard-meta { font-size:0.82rem; color:rgba(30,15,30,0.45); }
-.gcard-tag {
-  position:absolute; top:14px; right:14px;
-  background:var(--pink); color:#fff;
-  padding:4px 12px; border-radius:50px;
-  font-size:0.72rem; font-weight:700; letter-spacing:0.5px;
-}
-.gallery-empty {
-  grid-column:1/-1; text-align:center; padding:80px 20px;
-  color:rgba(30,15,30,0.35);
-}
-.gallery-empty .empty-icon { font-size:3rem; margin-bottom:16px; }
-.gallery-empty p { font-size:0.95rem; }
-
-/* ── MARQUEE ───────────────────── */
-.marquee-section { background:var(--plum); padding:22px 0; overflow:hidden; }
-.marquee-track {
-  display:flex; gap:60px; white-space:nowrap;
-  animation: marquee 20s linear infinite;
-}
-.marquee-item {
-  color: var(--blush); font-family:var(--ff-h);
-  font-size:1rem; font-style:italic; flex-shrink:0;
-  display:flex; align-items:center; gap:12px;
-}
-.marquee-dot { width:6px;height:6px;border-radius:50%;background:var(--pink);flex-shrink:0; }
-@keyframes marquee { to { transform:translateX(-50%); } }
+.pt-card:hover { border-color:var(--pink); transform:translateY(-2px); box-shadow:0 8px 20px rgba(232,130,154,0.12); }
+.pt-card.active { border-color:var(--pink); background:rgba(232,130,154,0.07); }
+.pt-card .pt-icon { font-size:1.8rem; margin-bottom:6px; }
+.pt-card .pt-name { font-size:0.78rem; font-weight:700; color:var(--plum); }
+.pt-card .pt-price { font-size:0.72rem; color:var(--pink); margin-top:2px; font-weight:600; }
 
 /* ── PROCESS ───────────────────── */
-.process-section { padding:100px 80px; background:var(--cream); }
+.process-section { padding:110px 80px; background: var(--panel); }
 .process-grid {
   max-width:1000px; margin:0 auto;
   display:grid; grid-template-columns:repeat(3,1fr); gap:32px;
 }
 .pstep {
   text-align:center; padding:40px 24px;
-  background:var(--white); border-radius:24px;
-  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04); border-radius:24px;
+  border:1px solid rgba(255,255,255,0.07);
   transition:transform 0.3s, box-shadow 0.3s;
 }
-.pstep:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(30,15,30,0.08); }
+.pstep:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(0,0,0,0.3); }
 .pstep-num {
   width:56px;height:56px;
   background:linear-gradient(135deg, var(--rose), var(--pink));
@@ -396,13 +476,69 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
   box-shadow:0 8px 20px rgba(232,130,154,0.35);
 }
 .pstep-icon { font-size:1.8rem; margin-bottom:12px; }
-.pstep h3 { font-family:var(--ff-h); font-size:1.1rem; margin-bottom:10px; }
-.pstep p { font-size:0.88rem; color:rgba(30,15,30,0.5); line-height:1.7; }
+.pstep h3 { font-family:var(--ff-h); font-size:1.1rem; margin-bottom:10px; color:var(--white); }
+.pstep p { font-size:0.88rem; color:rgba(255,255,255,0.45); line-height:1.7; }
 
-/* ── MODAL ─────────────────────── */
+/* ── DRAW TOOL ─────────────────── */
+.draw-overlay {
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(13,13,26,0.85); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px; opacity:0; pointer-events:none;
+  transition:opacity 0.3s;
+}
+.draw-overlay.open { opacity:1; pointer-events:all; }
+.draw-modal {
+  background:var(--white); border-radius:24px;
+  padding:32px; max-width:680px; width:100%;
+  transform:translateY(20px); transition:transform 0.3s;
+}
+.draw-overlay.open .draw-modal { transform:none; }
+.draw-modal h3 { font-family:var(--ff-h); font-size:1.5rem; margin-bottom:6px; color:var(--plum); }
+.draw-modal p { font-size:0.85rem; color:#888; margin-bottom:20px; }
+.draw-toolbar {
+  display:flex; align-items:center; gap:10px;
+  flex-wrap:wrap; margin-bottom:14px;
+  padding:12px 16px; background:var(--soft);
+  border-radius:12px;
+}
+.draw-colors { display:flex; gap:7px; }
+.draw-color-dot {
+  width:26px; height:26px; border-radius:50%;
+  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
+  border:2px solid transparent;
+}
+.draw-color-dot:hover { transform:scale(1.2); }
+.draw-color-dot.active { box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--plum); }
+.draw-sep { width:1px; height:28px; background:var(--border); }
+.draw-tool-btn {
+  padding:6px 14px; border-radius:8px; border:2px solid var(--border);
+  background:var(--white); font-size:0.8rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s; color:var(--plum);
+}
+.draw-tool-btn:hover,.draw-tool-btn.active { border-color:var(--pink); background:rgba(232,130,154,0.1); color:var(--pink); }
+.draw-size-row { display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--plum); }
+.draw-size-row input[type=range] { width:80px; accent-color:var(--pink); }
+.draw-canvas-wrap {
+  border:2px solid var(--border); border-radius:12px;
+  overflow:hidden; cursor:crosshair; position:relative;
+  background: repeating-conic-gradient(#f0f0f0 0% 25%, white 0% 50%) 0 0 / 20px 20px;
+}
+#drawCanvas { display:block; width:100%; touch-action:none; }
+.draw-actions { display:flex; gap:10px; margin-top:16px; }
+.draw-upload-label {
+  padding:10px 18px; border-radius:10px;
+  border:2px dashed var(--border); background:var(--soft);
+  font-size:0.85rem; font-weight:600; cursor:pointer;
+  color:var(--plum); transition:all 0.2s;
+  display:flex; align-items:center; gap:8px;
+}
+.draw-upload-label:hover { border-color:var(--pink); color:var(--pink); }
+
+/* ── ORDER MODAL ─────────────────── */
 .overlay {
   position:fixed; inset:0; z-index:500;
-  background:rgba(30,15,30,0.75);
+  background:rgba(13,13,26,0.85);
   backdrop-filter:blur(8px);
   display:flex; align-items:center; justify-content:center;
   padding:20px; opacity:0; pointer-events:none;
@@ -418,7 +554,7 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 }
 .overlay.open .modal { transform:none; }
 .modal-head { margin-bottom:8px; }
-.modal-head h2 { font-family:var(--ff-h); font-size:1.9rem; font-weight:800; }
+.modal-head h2 { font-family:var(--ff-h); font-size:1.9rem; font-weight:800; color:var(--plum); }
 .modal-sub { color:rgba(30,15,30,0.45); font-size:0.9rem; margin-bottom:26px; }
 .order-summary {
   background:rgba(232,130,154,0.08);
@@ -461,13 +597,13 @@ body { font-family: var(--ff-b); background: var(--cream); color: var(--plum); o
 .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 .success-view { display:none; text-align:center; padding:20px 0; }
 .success-view .s-emoji { font-size:3.5rem; margin-bottom:16px; }
-.success-view h3 { font-family:var(--ff-h); font-size:1.6rem; margin-bottom:10px; }
+.success-view h3 { font-family:var(--ff-h); font-size:1.6rem; margin-bottom:10px; color:var(--plum); }
 .success-view p { color:rgba(30,15,30,0.5); font-size:0.9rem; line-height:1.8; }
 
 /* ── FOOTER ────────────────────── */
 footer {
-  background:var(--plum); color:rgba(255,255,255,0.5);
-  padding:60px 80px 40px;
+  background: var(--plum); color:rgba(255,255,255,0.45);
+  padding:70px 80px 40px;
 }
 .footer-grid {
   max-width:1200px; margin:0 auto;
@@ -477,84 +613,13 @@ footer {
 .footer-brand .logo { font-family:var(--ff-h); font-size:1.5rem; font-weight:700; color:#fff; margin-bottom:12px; }
 .footer-brand .logo span { color:var(--pink); font-style:italic; }
 .footer-brand p { font-size:0.88rem; line-height:1.7; max-width:280px; }
-.footer-col h4 { color:#fff; font-size:0.82rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
-.footer-col a { display:block; color:rgba(255,255,255,0.45); text-decoration:none; font-size:0.88rem; margin-bottom:8px; transition:color 0.2s; }
+.footer-col h4 { color:#fff; font-size:0.8rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
+.footer-col a { display:block; color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.88rem; margin-bottom:10px; transition:color 0.2s; }
 .footer-col a:hover { color:var(--pink); }
 .footer-bottom {
   border-top:1px solid rgba(255,255,255,0.08);
-  padding-top:28px; text-align:center;
-  font-size:0.82rem;
+  padding-top:28px; text-align:center; font-size:0.82rem;
 }
-
-/* ── PRODUCT TYPE SELECTOR ─────── */
-.product-type-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
-.pt-card {
-  border:2px solid var(--border); border-radius:14px;
-  padding:14px 10px; cursor:pointer; text-align:center;
-  background:var(--white); transition:all 0.2s;
-  position:relative;
-}
-.pt-card:hover { border-color:var(--pink); transform:translateY(-2px); box-shadow:0 8px 20px rgba(232,130,154,0.12); }
-.pt-card.active { border-color:var(--pink); background:rgba(232,130,154,0.07); }
-.pt-card .pt-icon { font-size:1.8rem; margin-bottom:6px; }
-.pt-card .pt-name { font-size:0.78rem; font-weight:700; color:var(--plum); }
-.pt-card .pt-price { font-size:0.72rem; color:var(--pink); margin-top:2px; font-weight:600; }
-
-/* ── DRAW TOOL ─────────────────── */
-.draw-overlay {
-  position:fixed; inset:0; z-index:9000;
-  background:rgba(30,15,30,0.8); backdrop-filter:blur(8px);
-  display:flex; align-items:center; justify-content:center;
-  padding:20px; opacity:0; pointer-events:none;
-  transition:opacity 0.3s;
-}
-.draw-overlay.open { opacity:1; pointer-events:all; }
-.draw-modal {
-  background:var(--white); border-radius:24px;
-  padding:32px; max-width:680px; width:100%;
-  transform:translateY(20px); transition:transform 0.3s;
-}
-.draw-overlay.open .draw-modal { transform:none; }
-.draw-modal h3 { font-family:var(--ff-h); font-size:1.5rem; margin-bottom:6px; }
-.draw-modal p { font-size:0.85rem; color:var(--muted,#888); margin-bottom:20px; }
-.draw-toolbar {
-  display:flex; align-items:center; gap:10px;
-  flex-wrap:wrap; margin-bottom:14px;
-  padding:12px 16px; background:var(--soft);
-  border-radius:12px;
-}
-.draw-colors { display:flex; gap:7px; }
-.draw-color-dot {
-  width:26px; height:26px; border-radius:50%;
-  cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
-  border:2px solid transparent;
-}
-.draw-color-dot:hover { transform:scale(1.2); }
-.draw-color-dot.active { box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--plum); }
-.draw-sep { width:1px; height:28px; background:var(--border); }
-.draw-tool-btn {
-  padding:6px 14px; border-radius:8px; border:2px solid var(--border);
-  background:var(--white); font-size:0.8rem; font-weight:600;
-  cursor:pointer; transition:all 0.2s; color:var(--plum);
-}
-.draw-tool-btn:hover,.draw-tool-btn.active { border-color:var(--pink); background:rgba(232,130,154,0.1); color:var(--pink); }
-.draw-size-row { display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--plum); }
-.draw-size-row input[type=range] { width:80px; accent-color:var(--pink); }
-.draw-canvas-wrap {
-  border:2px solid var(--border); border-radius:12px;
-  overflow:hidden; cursor:crosshair; position:relative;
-  background: repeating-conic-gradient(#f0f0f0 0% 25%, white 0% 50%) 0 0 / 20px 20px;
-}
-#drawCanvas { display:block; width:100%; touch-action:none; }
-.draw-actions { display:flex; gap:10px; margin-top:16px; }
-.draw-upload-label {
-  padding:10px 18px; border-radius:10px;
-  border:2px dashed var(--border); background:var(--soft);
-  font-size:0.85rem; font-weight:600; cursor:pointer;
-  color:var(--plum); transition:all 0.2s;
-  display:flex; align-items:center; gap:8px;
-}
-.draw-upload-label:hover { border-color:var(--pink); color:var(--pink); }
 
 /* ── RESPONSIVE ────────────────── */
 @media (max-width:900px) {
@@ -562,6 +627,8 @@ footer {
   .hero-sub { margin:0 auto 32px; }
   .hero-btns { justify-content:center; }
   .hero-right { margin-top:40px; }
+  .categories-section { padding:70px 28px; }
+  .cat-grid { grid-template-columns:repeat(2,1fr); }
   .customizer-section { padding:70px 28px; }
   .customizer-wrap { grid-template-columns:1fr; gap:48px; }
   .tumbler-stage { position:static; }
@@ -575,6 +642,9 @@ footer {
   .nav { padding:0 20px; }
   .nav-links { gap:16px; }
 }
+@media (max-width:600px) {
+  .cat-grid { grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
@@ -585,7 +655,7 @@ footer {
   <div class="nav-links">
     <a href="#customizer">Design</a>
     <a href="#gallery">Gallery</a>
-    <a href="admin.html" target="_blank" class="nav-cta">Admin ↗</a>
+    <a href="#customizer" class="nav-cta">Order Now →</a>
   </div>
 </nav>
 
@@ -595,17 +665,17 @@ footer {
   <div class="hero-orb hero-orb-2"></div>
   <div class="hero-orb hero-orb-3"></div>
   <div class="hero-deco" style="top:20%;left:5%;font-size:1.2rem;">✦</div>
-  <div class="hero-deco" style="top:70%;left:8%;font-size:0.9rem;">✦</div>
+  <div class="hero-deco" style="top:72%;left:8%;font-size:0.9rem;">✦</div>
   <div class="hero-deco" style="top:40%;left:42%;font-size:1.5rem;">❋</div>
+  <div class="hero-deco" style="top:15%;right:38%;font-size:1rem;">❋</div>
 
   <div class="hero-left">
     <div class="hero-tag">✦ &nbsp;Handmade in Ontario, Canada</div>
+    <!-- TEXT IS VISIBLE BY DEFAULT — no CSS opacity:0 or translateY here -->
     <h1 class="hero-title">
-      <span class="line"><span class="line-inner">Custom</span></span>
-      <span class="line"><span class="line-inner italic">Creations</span></span>
-      <span class="line"><span class="line-inner">Made For You</span></span>
+      Custom Tumblers<br>&amp; <span class="italic">Gifts</span> —<br>Made For You.
     </h1>
-    <p class="hero-sub">Design your perfect 20oz skinny tumbler — see it live in 3D, then order directly. Handcrafted with heat press &amp; Cricut in the GTA.</p>
+    <p class="hero-sub">Design your perfect tumbler and gifts — see them live in 3D, then order directly. Handcrafted with heat press &amp; Cricut in the GTA.</p>
     <div class="hero-btns">
       <a href="#customizer" class="btn-hero-primary">Start Designing →</a>
       <a href="#gallery" class="btn-hero-secondary">See Our Work</a>
@@ -614,7 +684,7 @@ footer {
 
   <div class="hero-right">
     <div style="position:relative;">
-      <canvas id="heroTumbler" width="320" height="440"></canvas>
+      <canvas id="heroTumbler" width="340" height="460"></canvas>
       <div class="hero-spin-hint"><span class="spin-icon">↻</span> drag to spin</div>
     </div>
   </div>
@@ -624,33 +694,126 @@ footer {
 <div class="marquee-section">
   <div class="marquee-track" id="marqueeTrack">
     <span class="marquee-item"><span class="marquee-dot"></span>Custom Tumblers</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Heat Press</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Heat Press Made</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Cricut Designs</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Glass Cups</span>
     <span class="marquee-item"><span class="marquee-dot"></span>GTA Local</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Butterfly Designs</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bow Designs</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Custom Gifts</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Bookmarks</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Apparel</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Gift Sets</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Ontario Made</span>
+    <!-- duplicate for seamless loop -->
     <span class="marquee-item"><span class="marquee-dot"></span>Custom Tumblers</span>
-    <span class="marquee-item"><span class="marquee-dot"></span>Heat Press</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Heat Press Made</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Cricut Designs</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Glass Cups</span>
     <span class="marquee-item"><span class="marquee-dot"></span>GTA Local</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Butterfly Designs</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bow Designs</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Custom Gifts</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Bookmarks</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Apparel</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Gift Sets</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Ontario Made</span>
   </div>
 </div>
+
+<!-- WHAT WE CREATE -->
+<section class="categories-section" id="categories">
+  <div class="section-header">
+    <div class="section-tag">Our Products</div>
+    <h2 class="section-title">What We <em>Create</em></h2>
+    <p class="section-sub">Every piece handcrafted in our GTA studio with professional heat press and Cricut machines.</p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card">
+      <div class="cat-icon">🥤</div>
+      <div class="cat-name">Custom Tumblers</div>
+      <div class="cat-desc">20oz & 30oz skinny tumblers with full-wrap sublimation designs — butterflies, bows, floral, and more.</div>
+      <div class="cat-price">From $30</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">🧊</div>
+      <div class="cat-name">Glass Cups</div>
+      <div class="cat-desc">Stunning 16oz glass cups with custom designs. Perfect for gifting or treating yourself.</div>
+      <div class="cat-price">From $28</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">☕</div>
+      <div class="cat-name">Mugs</div>
+      <div class="cat-desc">11oz sublimation mugs with your name, design, or a meaningful message.</div>
+      <div class="cat-price">From $25</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">📚</div>
+      <div class="cat-name">Bookmarks</div>
+      <div class="cat-desc">Elegant custom bookmark sets — a thoughtful gift for any book lover.</div>
+      <div class="cat-price">From $12 / set</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">👕</div>
+      <div class="cat-name">Apparel</div>
+      <div class="cat-desc">Custom sublimation tees and tops with your unique design pressed in vibrant colour.</div>
+      <div class="cat-price">From $30</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-icon">🎁</div>
+      <div class="cat-name">Gift Sets</div>
+      <div class="cat-desc">Curated bundles — tumblers, mugs, bookmarks — beautifully packaged and ready to gift.</div>
+      <div class="cat-price">From $60</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="section-header">
+    <div class="section-tag">Our Work</div>
+    <h2 class="section-title">Our Latest <em>Creations</em></h2>
+    <p class="section-sub">Browse our handcrafted pieces — each one made with love in our GTA studio.</p>
+  </div>
+  <!-- Real products from localStorage -->
+  <div class="gallery-grid" id="galleryGrid" style="display:none;"></div>
+  <!-- Placeholder cards shown when no products -->
+  <div class="placeholder-cards" id="placeholderCards">
+    <div class="placeholder-card">
+      <div class="placeholder-img" style="background:linear-gradient(135deg,rgba(232,130,154,0.2),rgba(201,84,122,0.1));">🦋</div>
+      <div class="placeholder-body"><div class="placeholder-name">Butterfly Tumbler</div><div class="placeholder-meta">20oz Skinny · from $38</div></div>
+    </div>
+    <div class="placeholder-card">
+      <div class="placeholder-img" style="background:linear-gradient(135deg,rgba(201,168,124,0.2),rgba(245,200,216,0.1));">🎀</div>
+      <div class="placeholder-body"><div class="placeholder-name">Bow Design Tumbler</div><div class="placeholder-meta">20oz Skinny · from $36</div></div>
+    </div>
+    <div class="placeholder-card">
+      <div class="placeholder-img" style="background:linear-gradient(135deg,rgba(78,205,196,0.15),rgba(65,105,225,0.1));">🧊</div>
+      <div class="placeholder-body"><div class="placeholder-name">Custom Glass Cup</div><div class="placeholder-meta">16oz Glass · from $28</div></div>
+    </div>
+    <div class="placeholder-card">
+      <div class="placeholder-img" style="background:linear-gradient(135deg,rgba(155,89,182,0.15),rgba(232,130,154,0.1));">🌸</div>
+      <div class="placeholder-body"><div class="placeholder-name">Floral Mug</div><div class="placeholder-meta">11oz Ceramic · from $25</div></div>
+    </div>
+    <div class="placeholder-card">
+      <div class="placeholder-img" style="background:linear-gradient(135deg,rgba(76,175,131,0.15),rgba(135,206,235,0.1));">🎁</div>
+      <div class="placeholder-body"><div class="placeholder-name">Gift Set Bundle</div><div class="placeholder-meta">Tumbler + Mug · from $60</div></div>
+    </div>
+    <div class="placeholder-card">
+      <div class="placeholder-img" style="background:linear-gradient(135deg,rgba(255,217,61,0.15),rgba(255,107,107,0.1));">⭐</div>
+      <div class="placeholder-body"><div class="placeholder-name">Stars Collection</div><div class="placeholder-meta">Custom Tumbler · from $32</div></div>
+    </div>
+  </div>
+</section>
 
 <!-- CUSTOMIZER -->
 <section class="customizer-section" id="customizer">
   <div class="section-header">
     <div class="section-tag">Design Studio</div>
-    <h2 class="section-title">Create Your <em>20oz Skinny</em> Tumbler</h2>
-    <p class="section-sub">Spin to see every angle. Your design updates in real time.</p>
+    <h2 class="section-title">Create Your <em>Custom</em> Tumbler</h2>
+    <p class="section-sub">Spin it live in 3D. Your design updates in real time.</p>
   </div>
   <div class="customizer-wrap">
-
     <!-- 3D Stage -->
     <div class="tumbler-stage">
       <canvas id="tumblerCanvas" width="380" height="480"></canvas>
@@ -658,12 +821,11 @@ footer {
         <button class="stage-btn auto-rotate-btn active" id="rotateBtn" title="Toggle auto-rotate" onclick="toggleRotate()">↻</button>
         <button class="stage-btn" title="Reset view" onclick="resetView()">⊙</button>
       </div>
-      <div class="product-pill">20oz Skinny Tumbler · durecreates</div>
+      <div class="product-pill" id="productBadge">20oz Skinny Tumbler · durecreates</div>
     </div>
 
     <!-- Options -->
     <div class="options-panel">
-
       <div class="opt-group" id="productTypeGroup">
         <span class="opt-label">Choose Your Product</span>
         <div class="product-type-grid" id="productTypeGrid"></div>
@@ -726,21 +888,11 @@ footer {
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="gallery-section" id="gallery">
-  <div class="section-header">
-    <div class="section-tag">Our Work</div>
-    <h2 class="section-title">Designs We've <em>Made</em></h2>
-    <p class="section-sub">Browse our creations — each one handcrafted in our GTA studio.</p>
-  </div>
-  <div class="gallery-grid" id="galleryGrid"></div>
-</section>
-
-<!-- PROCESS -->
+<!-- HOW IT WORKS -->
 <section class="process-section">
   <div class="section-header">
     <div class="section-tag">The Process</div>
-    <h2 class="section-title">Made With <em>Love</em></h2>
+    <h2 class="section-title">How It <em>Works</em></h2>
   </div>
   <div class="process-grid">
     <div class="pstep">
@@ -853,6 +1005,7 @@ footer {
       <h4>Shop</h4>
       <a href="#customizer">Design a Tumbler</a>
       <a href="#gallery">Gallery</a>
+      <a href="#categories">Products</a>
     </div>
     <div class="footer-col">
       <h4>Connect</h4>
@@ -861,7 +1014,7 @@ footer {
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 durecreates — DURE CREATES Custom Creations · Ontario, Canada</p>
+    <p>© 2026 durecreates — Custom Creations · Ontario, Canada</p>
   </div>
 </footer>
 
@@ -870,10 +1023,11 @@ footer {
 {"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.158.0/examples/jsm/"}}
 </script>
 
-<!-- GSAP -->
+<!-- GSAP + ScrollTrigger -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
 <script type="module">
 import * as THREE from 'three';
@@ -931,12 +1085,10 @@ function makeScene(canvasEl) {
   const bot = new THREE.DirectionalLight(0xffffff, 0.2);
   bot.position.set(0, -5, 2); scene.add(bot);
 
-  // 20oz Skinny Tumbler geometry — clean, no top ring
+  // 20oz Skinny Tumbler geometry
   const segments = 128;
   const bodyGeo  = new THREE.CylinderGeometry(1.32, 1.08, 5.6, segments, 1, false);
-  // Bottom base ring only (realistic base)
   const baseRingGeo = new THREE.TorusGeometry(1.09, 0.055, 16, segments);
-  // Bottom disc
   const baseDiscGeo = new THREE.CircleGeometry(1.08, segments);
 
   // Design texture canvas
@@ -973,7 +1125,7 @@ function makeScene(canvasEl) {
   return { renderer, scene, camera, group, tex, texCanvas, bodyMat, capMat, lipMat };
 }
 
-// ── HERO SCENE (simple, no controls) ───────────────────────────────────
+// ── HERO SCENE ─────────────────────────────────────────────────────────
 const heroEl = document.getElementById('heroTumbler');
 const heroScn = makeScene(heroEl);
 const heroControls = new OrbitControls(heroScn.camera, heroEl);
@@ -1029,15 +1181,12 @@ function buildTexture(scn) {
   const W = c.width, H = c.height;
   ctx.clearRect(0,0,W,H);
 
-  // Base color
   ctx.fillStyle = STATE.color;
   ctx.fillRect(0,0,W,H);
 
-  // Custom design image
   if (STATE.pattern === '_custom' && STATE.customDesignImg) {
     ctx.drawImage(STATE.customDesignImg, 0, 0, W, H);
   } else {
-    // Tile pattern 4× across width for full wrap coverage
     for (let tx=0; tx<4; tx++) {
       const ox = tx * W/4;
       ctx.save();
@@ -1047,12 +1196,10 @@ function buildTexture(scn) {
     }
   }
 
-  // Text — draw at 1/4 and 3/4 positions (front & back of tumbler)
   if (STATE.text1 || STATE.text2) {
     [W*0.25, W*0.75].forEach(cx => drawTexText(ctx, cx, H/2, W/4 * 0.88));
   }
 
-  // Subtle edge shading
   const leftEdge = ctx.createLinearGradient(0,0,W*0.04,0);
   leftEdge.addColorStop(0,'rgba(0,0,0,0.18)');
   leftEdge.addColorStop(1,'rgba(0,0,0,0)');
@@ -1064,7 +1211,6 @@ function buildTexture(scn) {
 
   scn.tex.needsUpdate = true;
 
-  // Update cap color
   const capHex = STATE.color === '#FFFFFF' ? 0xd0d0d0 : parseInt(STATE.color.replace('#',''), 16);
   scn.capMat.color.setHex(capHex);
   scn.lipMat.color.setHex(capHex);
@@ -1075,7 +1221,6 @@ window.updateTexture = () => {
   STATE.text2 = document.getElementById('t2').value;
   buildTexture(mainScn);
   buildTexture(heroScn);
-  // Update mini pattern previews
   rebuildPatternPreviews();
 };
 
@@ -1107,23 +1252,17 @@ function drawFlower(ctx,x,y,s,c1,c2){
 }
 function drawBow(ctx,x,y,s,col){
   ctx.save();ctx.globalAlpha=0.78;ctx.fillStyle=col;
-  // Left wing
   ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x-s*1.2,y-s*0.8,x-s*1.5,y+s*0.3,x-s*0.1,y+s*0.05);ctx.fill();
-  // Right wing
   ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x+s*1.2,y-s*0.8,x+s*1.5,y+s*0.3,x+s*0.1,y+s*0.05);ctx.fill();
-  // Knot
   ctx.beginPath();ctx.arc(x,y,s*0.22,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fill();
   ctx.restore();
 }
 function drawButterfly(ctx,x,y,s,c1,c2){
   ctx.save();ctx.globalAlpha=0.75;
-  // Upper wings
   ctx.beginPath();ctx.ellipse(x-s*0.5,y-s*0.2,s*0.7,s*0.45,Math.PI*0.3,0,Math.PI*2);ctx.fillStyle=c1;ctx.fill();
   ctx.beginPath();ctx.ellipse(x+s*0.5,y-s*0.2,s*0.7,s*0.45,-Math.PI*0.3,0,Math.PI*2);ctx.fillStyle=c2;ctx.fill();
-  // Lower wings
   ctx.beginPath();ctx.ellipse(x-s*0.35,y+s*0.3,s*0.45,s*0.32,Math.PI*0.4,0,Math.PI*2);ctx.fillStyle=c1;ctx.globalAlpha=0.55;ctx.fill();
   ctx.beginPath();ctx.ellipse(x+s*0.35,y+s*0.3,s*0.45,s*0.32,-Math.PI*0.4,0,Math.PI*2);ctx.fillStyle=c2;ctx.fill();
-  // Body
   ctx.beginPath();ctx.ellipse(x,y,s*0.08,s*0.5,0,0,Math.PI*2);ctx.fillStyle=c1;ctx.globalAlpha=0.9;ctx.fill();
   ctx.restore();
 }
@@ -1252,28 +1391,60 @@ window.setFont = (btn) => {
 };
 
 // ── GALLERY ────────────────────────────────────────────────────────────
-// Reads from unified dc_products (same data as POS + management portal)
 function buildGallery() {
-  const grid = document.getElementById('galleryGrid');
-  // Try unified products first, then legacy gallery
+  const realGrid = document.getElementById('galleryGrid');
+  const placeholders = document.getElementById('placeholderCards');
+
   const unified = JSON.parse(localStorage.getItem('dc_products') || '[]');
   const legacy  = JSON.parse(localStorage.getItem('dc_gallery')  || '[]');
-  const products = unified.length ? unified.filter(p => p.webVisible !== false && p.image) : legacy.filter(d => d.visible);
-  grid.innerHTML = '';
+  const products = unified.length
+    ? unified.filter(p => p.webVisible !== false && p.image)
+    : legacy.filter(d => d.visible);
+
   if (!products.length) {
-    grid.innerHTML = `<div class="gallery-empty"><div class="empty-icon">🎨</div><p>Designs coming soon!<br>Follow <strong>@durecreates</strong> on Instagram for a peek.</p></div>`;
+    // Show placeholder cards with stagger animation
+    placeholders.style.display = 'grid';
+    realGrid.style.display = 'none';
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from('.placeholder-card', {
+      opacity:0, y:60, scale:0.92,
+      stagger: { amount: 0.7, from: 'start' },
+      duration: 0.8, ease:'power3.out',
+      scrollTrigger: { trigger: placeholders, start: 'top 82%' }
+    });
     return;
   }
+
+  // Show real products
+  placeholders.style.display = 'none';
+  realGrid.style.display = 'grid';
+  realGrid.innerHTML = '';
+
   products.forEach(p => {
     const card = document.createElement('div'); card.className = 'gcard';
-    const name = p.name || p.meta || '20oz Skinny Tumbler';
+    const name = p.name || p.meta || 'Custom Creation';
     const img  = p.image;
+    const price = p.price ? `$${parseFloat(p.price).toFixed(2)}` : '';
     card.innerHTML = img
       ? `<img class="gcard-img" src="${img}" alt="${name}">`
       : `<div class="gcard-img-placeholder">${p.emoji || '🥤'}</div>`;
-    card.innerHTML += `<div class="gcard-body"><div class="gcard-name">${name}</div><div class="gcard-meta">${p.category || p.meta || 'Custom Product'} · $${p.price ? p.price.toFixed(2) : ''}</div></div>`;
+    card.innerHTML += `
+      <div class="gcard-overlay"><a href="#customizer" class="gcard-order-btn">Order This →</a></div>
+      <div class="gcard-body">
+        <div class="gcard-name">${name}</div>
+        <div class="gcard-meta">${p.category || 'Custom Product'}${price ? ' · ' + price : ''}</div>
+      </div>`;
     if (p.featured) card.innerHTML += `<div class="gcard-tag">Featured</div>`;
-    grid.appendChild(card);
+    realGrid.appendChild(card);
+  });
+
+  // Staggered cascade animation
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from('.gcard', {
+    opacity:0, y:70, scale:0.88,
+    stagger: { amount: 0.8, from: 'start', ease: 'power2.inOut' },
+    duration: 0.9, ease:'power4.out',
+    scrollTrigger: { trigger: realGrid, start: 'top 82%' }
   });
 }
 
@@ -1347,7 +1518,6 @@ const DEFAULT_TYPES = [
   {id:'bottle',   name:'Water Bottle',icon:'💧', price:'From $35', shape:'bottle', visible:true},
 ];
 function loadProductTypes() {
-  // Use unified dc_products for web-visible products, fallback to hardcoded defaults
   const unifiedProducts = JSON.parse(localStorage.getItem('dc_products') || '[]');
   const webProducts = unifiedProducts.filter(p => p.webVisible !== false);
   const saved = JSON.parse(localStorage.getItem('dc_product_types') || 'null');
@@ -1369,14 +1539,13 @@ function loadProductTypes() {
       document.querySelectorAll('.pt-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       document.getElementById('productBadge').textContent = `${t.name} · durecreates`;
-      // Update hidden product field
       document.getElementById('hProduct').value = t.name;
     };
     grid.appendChild(card);
   });
 }
 
-// ── WRAP UPLOAD (quick upload from options panel) ───────────────────────
+// ── WRAP UPLOAD ────────────────────────────────────────────────────────
 window.handleWrapUpload = (input) => {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
@@ -1405,7 +1574,6 @@ function initDrawTool() {
   drawCtx.fillStyle = '#FFFFFF';
   drawCtx.fillRect(0, 0, dc.width, dc.height);
 
-  // Build color dots
   const colRow = document.getElementById('drawColors');
   DRAW_COLORS.forEach((c, i) => {
     const dot = document.createElement('div');
@@ -1422,7 +1590,6 @@ function initDrawTool() {
     colRow.appendChild(dot);
   });
 
-  // Draw events
   const getPos = (e) => {
     const rect = dc.getBoundingClientRect();
     const scaleX = dc.width / rect.width;
@@ -1496,7 +1663,18 @@ window.handleDrawUpload = (input) => {
 };
 
 // ── NAV SCROLL ─────────────────────────────────────────────────────────
-window.addEventListener('scroll',()=>{ document.getElementById('mainNav').classList.toggle('scrolled',scrollY>50); });
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled', scrollY > 50);
+});
+
+// ── LENIS SMOOTH SCROLL ────────────────────────────────────────────────
+if (typeof Lenis !== 'undefined') {
+  const lenis = new Lenis({ lerp: 0.07, smooth: true });
+  function lenisRaf(time) { lenis.raf(time); requestAnimationFrame(lenisRaf); }
+  requestAnimationFrame(lenisRaf);
+  // Integrate with GSAP ScrollTrigger if available
+  lenis.on('scroll', ScrollTrigger.update);
+}
 
 // ── INIT ───────────────────────────────────────────────────────────────
 buildColorGrid();
@@ -1511,45 +1689,43 @@ loadProductTypes();
 // ── GSAP ANIMATIONS ────────────────────────────────────────────────────
 gsap.registerPlugin(ScrollTrigger);
 
-// Hero orbs
-gsap.to('.hero-orb',{opacity:1,duration:2,stagger:0.3,ease:'power2.out'});
+// Hero orbs — animate in
+gsap.to('.hero-orb', { opacity:1, duration:2.5, stagger:0.4, ease:'power2.out' });
 
-// Hero tag
-gsap.to('.hero-tag',{opacity:1,y:0,duration:0.8,delay:0.3,ease:'power3.out',from:{y:20}});
-gsap.from('.hero-tag',{y:20,duration:0.8,delay:0.3,ease:'power3.out'});
+// Hero content — animates FROM hidden state, but CSS default is visible
+// Use gsap.from so CSS default (opacity:1, y:0) is the endpoint not the start
+gsap.from('.hero-tag', { opacity:0, y:20, duration:0.9, delay:0.2, ease:'power3.out' });
+gsap.from('.hero-title', { opacity:0, y:60, duration:1.1, delay:0.45, ease:'power4.out' });
+gsap.from('.hero-sub',   { opacity:0, y:30, duration:0.9, delay:0.85, ease:'power3.out' });
+gsap.from('.hero-btns',  { opacity:0, y:24, duration:0.9, delay:1.05, ease:'power3.out' });
 
-// Hero title lines
-gsap.to('.line-inner',{
-  y:0,duration:1,stagger:0.15,delay:0.5,ease:'power4.out',
-  from:{y:'100%'}
+// Hero tumbler fade in
+gsap.to('#heroTumbler', { opacity:1, duration:1.4, delay:0.6, ease:'power2.out' });
+
+// Floating sparkles
+gsap.to('.hero-deco', {
+  opacity:0.4, y:-12, duration:2.2,
+  stagger:0.5, delay:1.2, repeat:-1, yoyo:true, ease:'power1.inOut'
 });
-gsap.from('.line-inner',{y:'100%',duration:1,stagger:0.15,delay:0.5,ease:'power4.out'});
 
-// Hero sub + btns
-gsap.from('.hero-sub',{opacity:0,y:24,duration:0.9,delay:1.1,ease:'power3.out'});
-gsap.to('.hero-sub',{opacity:1,duration:0.1,delay:1.1});
-gsap.from('.hero-btns',{opacity:0,y:20,duration:0.9,delay:1.3,ease:'power3.out'});
-gsap.to('.hero-btns',{opacity:1,duration:0.1,delay:1.3});
-
-// Hero tumbler canvas
-gsap.to('#heroTumbler',{opacity:1,duration:1.2,delay:0.8,ease:'power2.out'});
-
-// Hero deco elements
-gsap.to('.hero-deco',{opacity:0.4,duration:2,stagger:0.4,delay:1,
-  y:-10,repeat:-1,yoyo:true,ease:'power1.inOut'});
-
-// Scroll animations
-gsap.from('.pstep',{
-  opacity:0,y:50,stagger:0.15,duration:0.8,ease:'power3.out',
-  scrollTrigger:{trigger:'.process-grid',start:'top 80%'}
+// Category cards staggered reveal
+gsap.from('.cat-card', {
+  opacity:0, y:50, stagger:0.1, duration:0.8, ease:'power3.out',
+  scrollTrigger:{ trigger:'.cat-grid', start:'top 82%' }
 });
-gsap.from('.gcard',{
-  opacity:0,y:40,scale:0.95,stagger:0.08,duration:0.7,ease:'power3.out',
-  scrollTrigger:{trigger:'#galleryGrid',start:'top 82%'}
+
+// Section headers
+gsap.utils.toArray('.section-header').forEach(el => {
+  gsap.from(el, {
+    opacity:0, y:36, duration:0.9, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 85%' }
+  });
 });
-gsap.from('.section-header',{
-  opacity:0,y:30,duration:0.9,ease:'power3.out',stagger:0.1,
-  scrollTrigger:{trigger:'.customizer-section',start:'top 80%'}
+
+// Process steps
+gsap.from('.pstep', {
+  opacity:0, y:50, stagger:0.18, duration:0.85, ease:'power3.out',
+  scrollTrigger:{ trigger:'.process-grid', start:'top 80%' }
 });
 
 </script>
