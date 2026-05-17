@@ -17,7 +17,9 @@
   --ff-h:'Playfair Display',serif; --ff-b:'Inter',system-ui,sans-serif;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{min-height:100vh;font-family:var(--ff-b);background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;}
+html,body{min-height:100vh;font-family:var(--ff-b);background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+/* iPad touch targets */
+button,input,select,textarea{font-size:16px;} /* prevent iOS auto-zoom on focus */
 
 /* ── LAYOUT ── */
 .app{display:flex;flex-direction:column;min-height:100vh;}
@@ -553,33 +555,76 @@ function openProductModal(id=null) {
   openModal('productModal');
 }
 function handleProdImg(input) {
-  const f=input.files[0]; if(!f)return;
-  const reader=new FileReader();
-  reader.onload=e=>{prodImgData=e.target.result;const p=document.getElementById('prodImgPreview');p.src=prodImgData;p.style.display='block';};
+  const f = input.files[0]; if (!f) return;
+  toast('Uploading image…');
+  const reader = new FileReader();
+  reader.onload = e => {
+    // Compress image to max 700px wide, JPEG 75% quality so it fits in localStorage
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 700;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w >= h) { h = Math.round(h * MAX / w); w = MAX; }
+        else        { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      prodImgData = canvas.toDataURL('image/jpeg', 0.75);
+      const prev = document.getElementById('prodImgPreview');
+      prev.src = prodImgData; prev.style.display = 'block';
+      const kb = Math.round(prodImgData.length * 0.75 / 1024);
+      toast(`Image ready (${kb}KB) ✓`, 'success');
+    };
+    img.src = e.target.result;
+  };
   reader.readAsDataURL(f);
 }
+
 function saveProduct() {
-  const name=document.getElementById('pName').value.trim();
-  const price=parseFloat(document.getElementById('pPrice').value);
-  if(!name||isNaN(price)){toast('Name and price are required.','warn');return;}
-  const products=DB.products();
-  const obj={
-    id:editingProductId||Date.now().toString(),
+  const name = document.getElementById('pName').value.trim();
+  if (!name) { toast('⚠ Please enter a product name', 'warn'); return; }
+
+  const priceStr = document.getElementById('pPrice').value.trim();
+  const price = parseFloat(priceStr);
+  if (priceStr === '' || isNaN(price) || price < 0) {
+    toast('⚠ Please enter a valid price (use 0 for free)', 'warn'); return;
+  }
+
+  const products = DB.products();
+  const obj = {
+    id:          editingProductId || Date.now().toString(),
     name, price,
-    description:document.getElementById('pDesc').value.trim(),
-    emoji:document.getElementById('pEmoji').value||'🥤',
-    stock:parseInt(document.getElementById('pStock').value)||0,
-    category:document.getElementById('pCat').value,
-    posVisible:document.getElementById('pPosVisible').checked,
-    webVisible:document.getElementById('pWebVisible').checked,
-    visible:document.getElementById('pPosVisible').checked, // legacy compat
-    image:prodImgData||null
+    description: document.getElementById('pDesc').value.trim(),
+    emoji:       document.getElementById('pEmoji').value || '🥤',
+    stock:       Math.max(0, parseInt(document.getElementById('pStock').value) || 0),
+    category:    document.getElementById('pCat').value,
+    posVisible:  document.getElementById('pPosVisible').checked,
+    webVisible:  document.getElementById('pWebVisible').checked,
+    visible:     document.getElementById('pPosVisible').checked,
+    image:       prodImgData || null
   };
-  if(editingProductId){const i=products.findIndex(x=>x.id===editingProductId);if(i>=0)products[i]=obj;}
-  else products.push(obj);
-  DB.save('products',products);
+
+  if (editingProductId) {
+    const i = products.findIndex(x => x.id === editingProductId);
+    if (i >= 0) products[i] = obj;
+  } else {
+    products.push(obj);
+  }
+
+  try {
+    DB.save('products', products);
+  } catch(e) {
+    // QuotaExceededError — storage full, try without image
+    toast('⚠ Storage full — saving without image. Try a smaller photo.', 'warn');
+    obj.image = null;
+    try { DB.save('products', products); } catch(_) { return; }
+  }
+
   closeModal('productModal');
-  renderProducts();updateCounts();toast('Product saved! ✓','success');
+  renderProducts(); updateCounts();
+  toast('Product saved! ✓', 'success');
 }
 function deleteProduct(id){
   if(!confirm('Delete this product?'))return;

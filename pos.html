@@ -31,10 +31,13 @@
   --order-w: 380px;
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html, body { height:100%; overflow:hidden; font-family:var(--ff-b); background:var(--bg); color:var(--white); -webkit-font-smoothing:antialiased; }
+html { height:100%; height:-webkit-fill-available; }
+body { height:100vh; height:100dvh; font-family:var(--ff-b); background:var(--bg); color:var(--white); -webkit-font-smoothing:antialiased; overflow:hidden; }
+/* Prevent iOS auto-zoom on input focus */
+input, select, textarea { font-size:16px; }
 
 /* ── APP SHELL ── */
-.app { display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+.app { display:flex; flex-direction:column; height:100vh; height:100dvh; height:-webkit-fill-available; overflow:hidden; }
 
 /* ── HEADER ── */
 .app-header {
@@ -560,6 +563,40 @@ html, body { height:100%; overflow:hidden; font-family:var(--ff-b); background:v
   </div>
 </div>
 
+<!-- ORDER EDIT MODAL -->
+<div class="sale-overlay" id="editOrderOverlay" style="z-index:1100;">
+  <div class="sale-modal" style="max-width:480px;text-align:left;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="font-family:var(--ff-h);font-size:1.4rem;font-weight:800;">Edit Order</div>
+      <button onclick="closeEditOrder()" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--dim);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <div style="font-size:0.75rem;color:var(--dim);margin-bottom:5px;font-weight:600;letter-spacing:1px;">CUSTOMER</div>
+        <input id="editCustomer" type="text" placeholder="Customer name" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--ff-b);outline:none;">
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--dim);margin-bottom:5px;font-weight:600;letter-spacing:1px;">PAYMENT METHOD</div>
+        <select id="editPayment" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--ff-b);outline:none;">
+          <option value="cash">💵 Cash</option>
+          <option value="card">💳 Card</option>
+          <option value="etransfer">📱 e-Transfer</option>
+          <option value="other">🔄 Other</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--dim);margin-bottom:5px;font-weight:600;letter-spacing:1px;">NOTE</div>
+        <input id="editNote" type="text" placeholder="Order note" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--ff-b);outline:none;">
+      </div>
+      <div id="editOrderSummary" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:0.82rem;color:var(--dim);"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="deleteOrderFromDash()" style="padding:13px 18px;border-radius:12px;background:rgba(232,85,85,0.12);border:1px solid rgba(232,85,85,0.3);color:var(--red);font-weight:700;cursor:pointer;font-family:var(--ff-b);">🗑 Delete Order</button>
+      <button onclick="saveEditOrder()" style="flex:1;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--rose),var(--pink));border:none;color:#fff;font-weight:800;cursor:pointer;font-family:var(--ff-b);">Save Changes →</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1011,7 +1048,7 @@ function renderDashboard() {
   if (!orders.length) { rList.innerHTML = '<div style="color:var(--dim);font-size:0.85rem;padding:20px 0;">No orders yet.</div>'; }
   else {
     const methods = {cash:'cash',card:'card',etransfer:'etransfer',other:''};
-    rList.innerHTML = orders.slice(0,15).map(o => {
+    rList.innerHTML = orders.slice(0,20).map(o => {
       const t = new Date(o.timestamp);
       const timeStr = t.toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'});
       const itemsSummary = o.items.map(i=>`${i.qty}× ${i.name}`).join(', ').substring(0,48);
@@ -1025,6 +1062,10 @@ function renderDashboard() {
           <div class="or-total">$${o.total.toFixed(2)}</div>
           <div class="or-time">${timeStr}</div>
           <span class="or-payment ${methods[o.payment]||''}">${o.payment}</span>
+          <div style="display:flex;gap:4px;margin-top:5px;justify-content:flex-end;">
+            <button onclick="openEditOrder('${o.id}')" style="padding:3px 9px;border-radius:6px;background:rgba(201,168,124,0.15);border:1px solid rgba(201,168,124,0.3);color:var(--gold);font-size:0.7rem;font-weight:700;cursor:pointer;">✏️ Edit</button>
+            <button onclick="deleteOrderDash('${o.id}')" style="padding:3px 9px;border-radius:6px;background:rgba(232,85,85,0.1);border:1px solid rgba(232,85,85,0.25);color:var(--red);font-size:0.7rem;font-weight:700;cursor:pointer;">🗑 Delete</button>
+          </div>
         </div>
       </div>`;
     }).join('');
@@ -1041,6 +1082,53 @@ function renderDashboard() {
         <span class="ls-stock">${p.stock===0?'OUT OF STOCK':p.stock+' left'}</span>
       </div>`).join('');
   }
+}
+
+// ══════════════════════════════════════════════
+// ORDER EDIT / DELETE (from Dashboard)
+// ══════════════════════════════════════════════
+let editingOrderId = null;
+
+function openEditOrder(id) {
+  const order = DB.orders().find(o => o.id === id);
+  if (!order) return;
+  editingOrderId = id;
+  document.getElementById('editCustomer').value = order.customer || '';
+  document.getElementById('editPayment').value  = order.payment  || 'cash';
+  document.getElementById('editNote').value     = order.note     || '';
+  // Show order summary
+  const items = order.items.map(i => `${i.qty}× ${i.name} — $${(i.price*i.qty).toFixed(2)}`).join('<br>');
+  document.getElementById('editOrderSummary').innerHTML =
+    `<strong style="color:var(--white);">${order.id}</strong><br><span style="color:var(--gold)">Total: $${order.total.toFixed(2)}</span><br><br>${items}`;
+  document.getElementById('editOrderOverlay').classList.add('open');
+}
+
+function closeEditOrder() {
+  document.getElementById('editOrderOverlay').classList.remove('open');
+  editingOrderId = null;
+}
+
+function saveEditOrder() {
+  if (!editingOrderId) return;
+  const orders = DB.orders();
+  const idx = orders.findIndex(o => o.id === editingOrderId);
+  if (idx < 0) return;
+  orders[idx].customer = document.getElementById('editCustomer').value.trim() || orders[idx].customer;
+  orders[idx].payment  = document.getElementById('editPayment').value;
+  orders[idx].note     = document.getElementById('editNote').value.trim();
+  localStorage.setItem('dc_orders', JSON.stringify(orders));
+  closeEditOrder();
+  renderDashboard();
+  toast('Order updated ✓', 'success');
+}
+
+function deleteOrderDash(id) {
+  if (!confirm(`Delete order ${id}? This cannot be undone.`)) return;
+  const orders = DB.orders().filter(o => o.id !== id);
+  localStorage.setItem('dc_orders', JSON.stringify(orders));
+  if (editingOrderId === id) closeEditOrder();
+  renderDashboard();
+  toast('Order deleted.', 'success');
 }
 
 // ══════════════════════════════════════════════
